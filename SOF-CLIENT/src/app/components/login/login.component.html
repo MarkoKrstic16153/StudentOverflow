@@ -1,11 +1,13 @@
 <h2>Dobrodosli nazad, ulogujte se </h2>
 <p>Korisnicko Ime : <input (keyup)="onKey0($event)"></p>
-<p>Lozinka : <input type="password" (keyup)="onKey1($event)"></p>
+<p>Lozinka : <input type="password" (keyup)="onKey1($event)" (keyup.enter)="login()"></p>
 <p><button (click)="login()">Prijavite Se</button></p>
+<div *ngIf="loginError">{{loginMessage}}</div>
 
 <h2>Nemate nalog, prijavite se se </h2>
 <p>Ime : <input (keyup)="onKey2($event)"></p>
 <p>Prezime : <input (keyup)="onKey3($event)"></p>
 <p>Korisnicko Ime : <input (keyup)="onKey4($event)"></p>
-<p>Lozinka : <input type="password" (keyup)="onKey5($event)"></p>
+<p>Lozinka : <input type="password" (keyup)="onKey5($event)" (click)="signUp()"></p>
 <p><button (click)="signUp()">Registrujte Se</button></p>
+<div *ngIf="signUpError">{{signUpMessage}}</div>

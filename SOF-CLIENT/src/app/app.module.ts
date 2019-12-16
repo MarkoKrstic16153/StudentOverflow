@@ -8,7 +8,9 @@ import { PitanjeComponent } from './components/pitanje/pitanje.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfilComponent } from './components/profil/profil.component';
 import { PitanjaComponent } from './components/pitanja/pitanja.component';
-
+import { PretragaPitanjaComponent } from './components/pretraga-pitanja/pretraga-pitanja.component';
+import { DodajPitanjeComponent } from './components/dodaj-pitanje/dodaj-pitanje.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,15 @@ import { PitanjaComponent } from './components/pitanja/pitanja.component';
     PitanjeComponent,
     HomeComponent,
     ProfilComponent,
-    PitanjaComponent
+    PitanjaComponent,
+    PretragaPitanjaComponent,
+    DodajPitanjeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

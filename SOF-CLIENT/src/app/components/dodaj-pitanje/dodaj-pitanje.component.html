@@ -1,0 +1,13 @@
+<h3>Dodajte Pitanje</h3>
+<p><label for="naslovInp">Vase pitanje :</label><textarea cols="60" rows="3" name="naslovInp" placeholder="Naslov" (keyup)="onKeyNaslov($event)"> </textarea></p>
+<p><label>Obrazlozenje pitanja : </label><textarea cols="60" rows="12" placeholder="Dodajte tekst vaseg pitanja..." (keyup)="onKeyText($event)" > </textarea></p>
+<p><label for="tagInp">Unesite vas tag</label><input name="tagInp" placeholder="Tagovi" (keyup)="onKeyTag($event)"/><button (click)="addTag()">Dodajte Tag</button></p>
+<p>Vasi Trenutni Tagovi : </p>
+<ul>
+<li *ngFor="let tag of tags; let i=index;">
+     {{i + 1}} #{{tag}} <button (click)="deleteTag(index)">Obrisi Tag</button>
+</li>
+</ul>
+
+<button (click)="addQuestion()">Dodaj Pitanje</button>
+<p *ngIf="addQError">{{addQMessage}}</p>

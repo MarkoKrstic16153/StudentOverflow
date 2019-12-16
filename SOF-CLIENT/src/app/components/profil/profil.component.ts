@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profil',
@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProfilComponent implements OnInit {
   username:string;
-  constructor(private route : ActivatedRoute) {
+  constructor(private route : ActivatedRoute,private router: Router) {
    }
 
   ngOnInit() {
@@ -16,6 +16,10 @@ export class ProfilComponent implements OnInit {
       this.username=Params["username"];
       console.log(this.username);
     });
+  }
+
+  dodajtePitanje(){
+    this.router.navigate(["dodajPitanje",this.username]);
   }
 
 }

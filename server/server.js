@@ -18,7 +18,7 @@ app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended: true}) );
 
-
+//#region GET
 app.get('/', (req, res) => res.send('Hello Marko World!'))
 
 app.get('/login/:username', function (req, res) {
@@ -29,25 +29,115 @@ app.get('/login/:username', function (req, res) {
             console.log(greska);
             throw greska;
         }
+
         console.log("GET-ovao ->" + rezultat);
         res.send({password:rezultat});
     });
-  })
+  });
 
+  app.get('/tags', function (req, res) {
+    redisClient.smembers("tags",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Tags ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
+  app.get('/newquestions', function (req, res) {
+    redisClient.lrange("nova",0,-1,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Nova pitanja naslovi ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
+  app.get('/tagquestion', function (req, res) {
+    redisClient.smembers("tags",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Tags ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
+  app.get('/allquestions', function (req, res) {
+    redisClient.smembers("allquestions",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Svi naslovi su ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
+  
+
+
+//#region POST
 app.post('/register', (req, res)=> {
     console.log(req.body);
     redisRegisterUser(req.body);
 });
-//Ime:this.signUpName,Prezime:this.signUpSurname,Sifra:this.signUpPassword,Username:this.signUpUsername,Rank:0
+
+app.post('/question', function (req, res) {
+    let naslov=req.body.naslov;
+
+    redisClient.hgetall(naslov,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+
+        console.log("GET-ovao ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
+app.post('/addquestion',(req, res)=>{
+    let question=req.body; 
+    console.log(question);
+    question.Tagovi.forEach(tag => {//pamti tagove
+        redisClient.sismember("tags",tag,(greska,rezultat) => {
+            if (greska) {
+                console.log(greska);
+                throw greska;
+            }
+            console.log("Is member ->" + rezultat);
+            if(rezultat=="0"){
+                redisClient.sadd("tags",tag);
+            }
+        });
+    });
+    //pamti pitanje
+    redisClient.hset(question.Naslov,"Tekst",question.TekstPitanje);
+    redisClient.hset(question.Naslov,"KoJePitao",question.KoJePitao);
+    redisClient.hset(question.Naslov,"Tagovi",JSON.stringify(question.Tagovi));
+    redisClient.hset(question.Naslov,"Upvotes",question.Upvotes);
+    redisClient.hset(question.Naslov,"Odgovori",JSON.stringify(question.Odgovori));
+    question.Tagovi.forEach(tag => {
+        redisClient.lpush(tag,question.Naslov);
+    });
+    redisClient.lpush("nova",question.Naslov);
+    redisClient.rpop("nova");
+    redisClient.sadd("allquestions",question.Naslov);
+});
+
 app.listen(port, () => console.log(`Moji server listening on port ${port}!`))
 //redisSet("1",JSON.stringify(jsonObjekat));//json u string za bazu
 //redisClient.get("1", redisCallback);
 function redisRegisterUser(user) {
-   // redisClient.hmset(user.Username,{Sifra:user.Sifra},{Ime:user.Ime},{Prezime:user.Prezime},{Rank:user.Rank});
    redisClient.hset(user.Username,"Password",user.Sifra);
    redisClient.hset(user.Username,"Rank",user.Rank);
    redisClient.hset(user.Username,"Ime",user.Ime);
    redisClient.hset(user.Username,"Prezime",user.Prezime);
-   //redisClient.hset(user.Username,"Password",user.Sifra);
 }
  

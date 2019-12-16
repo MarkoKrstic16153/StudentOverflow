@@ -1,0 +1,13 @@
+<h3>Pretrazite Pitanja</h3>
+<button>Pretrazi Najnovija</button>
+<button>Pretrazite Najpopularnija</button>
+<select (change)="onChangeSelect()" [(ngModel)]="selected">
+    <option  *ngFor="let tag of tags$ | async" [value]="tag">{{tag}}</option>
+</select>
+<p>Izabrani tagovi su :</p>
+<ul>
+    <li *ngFor="let tag of selectedTags; let i=index;">
+    {{i + 1}} #{{tag}} <button (click)="deleteTag(index)">Obrisi Tag</button>
+    </li>
+</ul>
+
