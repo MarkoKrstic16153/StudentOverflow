@@ -8,6 +8,7 @@ export class QuestionsService {
     ulrQuestionPost="http://localhost:3000/addquestion";
     urlGetTags="http://localhost:3000/tags";
     urlGetQuestion="http://localhost:3000/question/";
+    urlAllQuestions="http://localhost:3000/allquestions";
     constructor(private httpClient: HttpClient) { }
     
     postQuestion(newQuestion:Pitanje){
@@ -24,5 +25,9 @@ export class QuestionsService {
     }
     getQuestion(naslov:string):Observable<any>{
         return this.httpClient.post<any>(this.urlGetQuestion,{naslov:naslov});
+    }
+    getAllQuestions():Observable<string[]>
+    {
+        return this.httpClient.get<string[]>(this.urlAllQuestions)
     }
 }
