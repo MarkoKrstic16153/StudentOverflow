@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     if(this.loginUsername.trim().length>3 && this.loginPassword.trim().length>3)
     {
       this.userPassword$=this.httpService.getKorisnik(this.loginUsername);
-      this.userPassword$.subscribe((response:any) => {console.log(response.password);if(response.password==this.loginPassword){ this.router.navigate(["profil",this.loginUsername]);}else {this.loginMessage="Ne postoji takva Username/Password kombinacija.";this.loginError=true;}});
+      this.userPassword$.subscribe((response:any) => {console.log(response.password);if(response.password==this.loginPassword){ this.httpService.login(this.loginUsername);this.router.navigate(["profil",this.loginUsername]);}else {this.loginMessage="Ne postoji takva Username/Password kombinacija.";this.loginError=true;}});
     }
     else
     {

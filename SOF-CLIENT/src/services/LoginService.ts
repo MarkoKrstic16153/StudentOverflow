@@ -7,6 +7,7 @@ import { Korisnik } from 'src/models/korisnik';
 export class LoginService {
     urlGet = 'http://localhost:3000/login/';
     urlPost='http://localhost:3000/register';
+    loggedUser:string="";
     constructor(private httpClient: HttpClient) { 
       
     }
@@ -21,5 +22,8 @@ export class LoginService {
      .subscribe(data => {
         console.log(data);
       })
+    }
+    login(username:string){
+      this.loggedUser=username;
     }
 }

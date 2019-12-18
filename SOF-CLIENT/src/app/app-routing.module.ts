@@ -10,7 +10,7 @@ import { DodajPitanjeComponent } from './components/dodaj-pitanje/dodaj-pitanje.
 
 
 const routes: Routes = [
-  {path:'pitanje',component:PitanjeComponent},
+  {path:'pitanje/:data',component:PitanjeComponent},
   {path:'pitanja',component:PitanjaComponent},
   {path:'login',component:LoginComponent},
   {path:'profil/:username',component:ProfilComponent},

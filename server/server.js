@@ -1,3 +1,7 @@
+//allquestions set
+//nova lista
+//tagovi set
+//pojedinacni tag lista
 var redis = require('redis');
 var redisClient = redis.createClient(); 
 
@@ -57,14 +61,29 @@ app.get('/login/:username', function (req, res) {
     });
   });
 
-  app.get('/tagquestion', function (req, res) {
-    redisClient.smembers("tags",(greska,rezultat) => {
+  app.get('/tag/:tagname', function (req, res) {
+    var zahtev=req.params;
+    console.log(zahtev.tagname);
+    redisClient.lrange(zahtev.tagname,0,-1,(greska,rezultat) => {
         if (greska) {
             console.log(greska);
             throw greska;
         }
         console.log("Tags ->" + rezultat);
-        res.send(rezultat);
+        res.send(JSON.parse(rezultat));
+    });
+  });
+
+  app.get('/userquestions/:username', function (req, res) {
+    var zahtev=req.params;
+    //console.log(zahtev.username);
+    redisClient.hget(zahtev.username,"Pitanja",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        //console.log("Getuje Userova Pitanja ->" + rezultat);
+        res.send(JSON.parse(rezultat));
     });
   });
 
@@ -78,9 +97,6 @@ app.get('/login/:username', function (req, res) {
         res.send(rezultat);
     });
   });
-
-  
-
 
 //#region POST
 app.post('/register', (req, res)=> {
@@ -129,7 +145,49 @@ app.post('/addquestion',(req, res)=>{
     redisClient.lpush("nova",question.Naslov);
     redisClient.rpop("nova");
     redisClient.sadd("allquestions",question.Naslov);
+    redisClient.hget(question.KoJePitao,"Pitanja",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+
+        console.log("Pitanja Usera su ->" + rezultat);
+        //res.send(rezultat);
+        let nizPostavljenihPitanja=JSON.parse(rezultat);
+        if(!nizPostavljenihPitanja.includes(question.Naslov))
+            nizPostavljenihPitanja.unshift(question.Naslov);
+        redisClient.hset(question.KoJePitao,"Pitanja",JSON.stringify(nizPostavljenihPitanja));
+    });
 });
+
+app.post('/deletequestion', (req, res)=> {
+    let naslov=req.body.naslov;
+    redisClient.hgetall(naslov,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let pitanje;
+        pitanje=rezultat;
+        deleteQuestionFromUser(naslov,pitanje.KoJePitao);
+        deleteQuestionFromTags(naslov,JSON.parse(pitanje.Tagovi));
+        deleteFromAll(naslov);
+    });
+    redisClient.del(naslov);
+  });
+
+  app.post('/addanswer', (req, res)=> {
+    let zahtev=req.body;
+    redisClient.hget(zahtev.naslov,"Odgovori",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let odgovori=JSON.parse(rezultat);
+        odgovori.push(zahtev.odgovor);
+        redisClient.hset(zahtev.naslov,"Odgovori",JSON.stringify(odgovori));
+    });
+  });
 
 app.listen(port, () => console.log(`Moji server listening on port ${port}!`))
 //redisSet("1",JSON.stringify(jsonObjekat));//json u string za bazu
@@ -139,5 +197,33 @@ function redisRegisterUser(user) {
    redisClient.hset(user.Username,"Rank",user.Rank);
    redisClient.hset(user.Username,"Ime",user.Ime);
    redisClient.hset(user.Username,"Prezime",user.Prezime);
+   redisClient.hset(user.Username,"Pitanja","[]");
 }
+
+function deleteQuestionFromUser(question,user){
+    redisClient.hget(user,"Pitanja",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        
+        let nizUserPitanja=JSON.parse(rezultat);
+        let index = nizUserPitanja.indexOf(question);
+        if (index > -1) {
+            nizUserPitanja.splice(index, 1);
+        }
+        redisClient.hset(user,"Pitanja",JSON.stringify(nizUserPitanja));
+    });
+}
+
+function deleteQuestionFromTags(question,tags){
+    tags.forEach((tag)=>{
+        redisClient.lrem(tag,0,question);
+    });
+}
+
+function deleteFromAll(naslov){
+    redisClient.srem("allquestions",naslov);
+}
+
  

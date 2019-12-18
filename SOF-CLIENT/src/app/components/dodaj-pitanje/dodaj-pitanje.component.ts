@@ -61,8 +61,10 @@ export class DodajPitanjeComponent implements OnInit {
         let novoPitanje:Pitanje= {KoJePitao:this.username,Naslov:this.title,Odgovori:[],Tagovi:this.tags,TekstPitanje:this.questionText,Upvotes:0};
         console.log(novoPitanje);
         this.question$=this.questionService.getQuestion(novoPitanje.Naslov);
-        this.question$.subscribe((question)=>{if(question==null)
-                                  this.questionService.postQuestion(novoPitanje);});
+        this.question$.subscribe((question)=>{
+          if(question==null)
+            this.questionService.postQuestion(novoPitanje);
+        });
     }
   }
   goBack(){
