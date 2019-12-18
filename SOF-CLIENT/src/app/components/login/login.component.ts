@@ -3,6 +3,7 @@ import { Korisnik } from 'src/models/korisnik';
 import { Observable } from 'rxjs';
 import { LoginService } from 'src/services/LoginService';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Inject({
   
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
   signUpMessage:string="";
   userPassword$:Observable<string>;
   
-  constructor(private httpService:LoginService,private router: Router) { }
+  constructor(private httpService:LoginService,private router: Router,private location:Location) { }
 
   ngOnInit() {
   }
@@ -85,5 +86,8 @@ export class LoginComponent implements OnInit {
   onKey5(event:any){
     this.signUpPassword=event.target.value;
     this.signUpError=false;
+  }
+  goBack(){
+    this.location.back();
   }
 }

@@ -11,3 +11,4 @@
 <p>Lozinka : <input type="password" (keyup)="onKey5($event)" (click)="signUp()"></p>
 <p><button (click)="signUp()">Registrujte Se</button></p>
 <div *ngIf="signUpError">{{signUpMessage}}</div>
+<button (click)="goBack()">Nazad</button>

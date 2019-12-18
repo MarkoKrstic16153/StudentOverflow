@@ -14,6 +14,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OdgovorComponent } from './components/odgovor/odgovor.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PitanjaComponent,
     PretragaPitanjaComponent,
     DodajPitanjeComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    OdgovorComponent
   ],
   imports: [
     BrowserModule,

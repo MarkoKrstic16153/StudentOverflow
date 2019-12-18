@@ -5,6 +5,7 @@
 <select (change)="onChangeSelect()" [(ngModel)]="selected">
     <option  *ngFor="let tag of tags$ | async" [value]="tag">{{tag}}</option>
 </select>
+<button (click)="goBack()">Nazad</button>
 <p>Izabrani tagovi su :</p>
 <ul>
     <li *ngFor="let tag of selectedTags; let i=index;">

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { element } from 'protractor';
 import { Pitanje } from 'src/models/Pitanje';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { Observable } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-dodaj-pitanje',
@@ -18,7 +18,8 @@ export class DodajPitanjeComponent implements OnInit {
   questionText:string="";
   addQError:Boolean=false;
   addQMessage:string="";
-  constructor(private route : ActivatedRoute,private questionService: QuestionsService) { }
+  question$:Observable<any>;
+  constructor(private route : ActivatedRoute,private questionService: QuestionsService,private location: Location) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -59,7 +60,12 @@ export class DodajPitanjeComponent implements OnInit {
     {
         let novoPitanje:Pitanje= {KoJePitao:this.username,Naslov:this.title,Odgovori:[],Tagovi:this.tags,TekstPitanje:this.questionText,Upvotes:0};
         console.log(novoPitanje);
-        this.questionService.postQuestion(novoPitanje);
+        this.question$=this.questionService.getQuestion(novoPitanje.Naslov);
+        this.question$.subscribe((question)=>{if(question==null)
+                                  this.questionService.postQuestion(novoPitanje);});
     }
+  }
+  goBack(){
+    this.location.back();
   }
 }

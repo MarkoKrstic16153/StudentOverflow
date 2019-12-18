@@ -14,7 +14,7 @@ const routes: Routes = [
   {path:'pitanja',component:PitanjaComponent},
   {path:'login',component:LoginComponent},
   {path:'profil/:username',component:ProfilComponent},
-  {path: 'pretragapitanja',component:PretragaPitanjaComponent},
+  {path: 'pretragapitanja/:username',component:PretragaPitanjaComponent},
   {path:'dodajPitanje/:username',component:DodajPitanjeComponent},
   {path:'',component:HomeComponent},
 ];
