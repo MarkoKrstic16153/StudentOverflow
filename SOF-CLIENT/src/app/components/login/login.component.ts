@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { LoginService } from 'src/services/LoginService';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Inject({
   
@@ -14,80 +15,114 @@ import { Location } from '@angular/common';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginUsername:string="";
-  loginPassword:string="";
-  signUpName:string="";
-  signUpSurname:string="";
-  signUpUsername:string="";
-  signUpPassword:string="";
-  loginError:boolean=false;
-  signUpError:boolean=false;
-  loginMessage:string="";
-  signUpMessage:string="";
-  userPassword$:Observable<string>;
+  // signUpName:string="";
+  // signUpSurname:string="";
+  // signUpUsername:string="";
+  // signUpPassword:string="";
+  // loginError:boolean=false;
+  // signUpError:boolean=false;
+  loginErrorMessage:string=null;
+  signUpErrorMessage:string=null;
+  //userPassword$:Observable<string>;
+  loginFormGroup:FormGroup;
+  createAccFormGroup:FormGroup;
   
   constructor(private httpService:LoginService,private router: Router,private location:Location) { }
 
   ngOnInit() {
+    this.loginFormGroup=new FormGroup(
+      {
+        'username':new FormControl('',Validators.required),
+        'password':new FormControl('',Validators.required)
+      }
+    )
+    this.createAccFormGroup=new FormGroup(
+      {
+        'username':new FormControl('',
+        [
+          Validators.minLength(3),
+          Validators.required,
+          Validators.pattern(new RegExp("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])"))
+        ],),
+        'password':new FormControl('',
+        [
+          Validators.minLength(8),
+          Validators.required,
+          Validators.pattern(new RegExp("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])"))
+        ]),
+        'name':new FormControl('',[Validators.required,Validators.minLength(3)]),
+        'surname':new FormControl('',[Validators.required,Validators.minLength(3)])
+      }
+    )
   }
 
   login() {
-    if(this.loginUsername.trim().length>3 && this.loginPassword.trim().length>3)
-    {
-      this.userPassword$=this.httpService.getKorisnik(this.loginUsername);
-      this.userPassword$.subscribe((response:any) => {console.log(response.password);if(response.password==this.loginPassword){ this.httpService.login(this.loginUsername);this.router.navigate(["profil",this.loginUsername]);}else {this.loginMessage="Ne postoji takva Username/Password kombinacija.";this.loginError=true;}});
-    }
-    else
-    {
-      this.loginError=true;
-      this.loginMessage="Nevalidan unos!";
-    }
+      let userPassword$=this.httpService.getKorisnik(this.loginFormGroup.get('username').value);
+      console.log(this.loginFormGroup.get('username').value);
+      console.log(this.loginFormGroup.get('password').value);
+      userPassword$.subscribe((response:any) => {
+        console.log(response.password);
+        if(response.password==this.loginFormGroup.get('password').value)
+        { 
+          this.httpService.login(this.loginFormGroup.get('username').value);this.router.navigate(["profil",this.loginFormGroup.get('username').value]);
+          this.loginErrorMessage=null;
+        }
+        else 
+        {
+          this.loginErrorMessage="Ne postoji takva Username/Password kombinacija.";
+        }
+      });
   }
 
   signUp() {
-    if(this.signUpName.trim().length>2 && this.signUpSurname.trim().length>2 && this.signUpUsername.trim().length>3 && this.signUpPassword.trim().length>3)
-    {
-      this.userPassword$=this.httpService.getKorisnik(this.signUpUsername);
-      this.userPassword$.subscribe((response:any) => {if(response.password==null){
-        let noviKorisnik:Korisnik={Ime:this.signUpName,Prezime:this.signUpSurname,Sifra:this.signUpPassword,Username:this.signUpUsername,Rank:0};
-        this.httpService.postKorisnik(noviKorisnik);
-      }
-      else{ this.signUpError=true;
-        this.signUpMessage="Taj username je zauzet!";}
+      let userPassword$=this.httpService.getKorisnik(this.createAccFormGroup);
+      userPassword$.subscribe((response:any) => 
+      {
+        if(response.password==null)
+        {
+          this.signUpErrorMessage=null;
+          let noviKorisnik:Korisnik={
+            Ime:this.createAccFormGroup.get('name').value,
+            Prezime:this.createAccFormGroup.get('surname').value,
+            Sifra:this.createAccFormGroup.get('password').value,
+            Username:this.createAccFormGroup.get('username').value,
+            Rank:0
+          };
+          this.httpService.postKorisnik(noviKorisnik);
+          console.table(noviKorisnik);
+        }
+        else
+        {
+          this.signUpErrorMessage="Taj username je zauzet!";
+        }
     });
-    }
-    else
-    {
-      this.signUpError=true;
-      this.signUpMessage="Nevalidan unos!";
-    }
   }
 
-  onKey0(event:any){
-    this.loginUsername=event.target.value;
-    this.loginError=false;
-  }
-  onKey1(event:any){
-    this.loginPassword=event.target.value; 
-    this.loginError=false;
-  }
-  onKey2(event:any){
-    this.signUpName=event.target.value; 
-    this.signUpError=false;
-  }
-  onKey3(event:any){
-    this.signUpSurname=event.target.value;
-    this.signUpError=false;
-  }
-  onKey4(event:any){
-    this.signUpUsername=event.target.value;
-    this.signUpError=false;
-  }
-  onKey5(event:any){
-    this.signUpPassword=event.target.value;
-    this.signUpError=false;
-  }
-  goBack(){
-    this.location.back();
-  }
+  // onKey0(event:any){
+  //   this.loginUsername=event.target.value;
+  //   this.loginError=false;
+  // }
+  // onKey1(event:any){
+  //   this.loginPassword=event.target.value; 
+  //   this.loginError=false;
+  // }
+  // onKey2(event:any){
+  //   this.signUpName=event.target.value; 
+  //   this.signUpError=false;
+  // }
+  // onKey3(event:any){
+  //   this.signUpSurname=event.target.value;
+  //   this.signUpError=false;
+  // }
+  // onKey4(event:any){
+  //   this.signUpUsername=event.target.value;
+  //   this.signUpError=false;
+  // }
+  // onKey5(event:any){
+  //   this.signUpPassword=event.target.value;
+  //   this.signUpError=false;
+  // }
+  // goBack(){
+  //   this.location.back();
+  // }
 }

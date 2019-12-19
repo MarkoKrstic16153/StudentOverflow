@@ -1,22 +1,79 @@
 <div class="container bg-light p-3 mb-5 shadow rounded">
-    <div class="p-2">
+    <form class="p-2" [formGroup]="loginFormGroup" >
     <h2 class="row justify-content-md-center text-primary">Dobrodosli nazad, ulogujte se </h2>
-    <div class="row text-monospace">Korisnicko Ime : <input class="form-control" (keyup)="onKey0($event)"></div>
-    <div class="row text-monospace">Lozinka : <input class="form-control" type="password" (keyup)="onKey1($event)" (keyup.enter)="login()"></div>
-    <div class="row"><button class="btn btn-primary mt-2" (click)="login()">Prijavite Se</button></div>
-    <div *ngIf="loginError">{{loginMessage}}</div>
-    </div>
+
+    <div class="row text-monospace">Korisnicko Ime : <input class="form-control" formControlName="username"></div>
+    <div class="row text-monospace">Lozinka : <input class="form-control"  formControlName="password" type="password" (keyup.enter)="login()"></div>
+
+    <div class="row"><button class="btn btn-primary mt-2" [disabled]="!loginFormGroup.valid" (click)="login()">Prijavite Se</button></div>
+    
+        <div *ngIf="loginErrorMessage" class="alert alert-danger">
+            Pogresili ste korisnicko ime ili sifru!!!
+        </div>
+    </form>
 
 </div>
 <div class="container bg-light p-3 mb-5 shadow rounded">
-    <div class="p-2">
-    <h2 class="row justify-content-md-center text-success ">Nemate nalog, prijavite se se </h2>
-    <div class="row text-monospace">Ime : <input class="form-control" (keyup)="onKey2($event)"></div>
-    <div class="row text-monospace">Prezime : <input class="form-control" (keyup)="onKey3($event)"></div>
-    <div class="row text-monospace">Korisnicko Ime : <input class="form-control" (keyup)="onKey4($event)"></div>
-    <div class="row text-monospace">Lozinka : <input class="form-control" type="password" (keyup)="onKey5($event)" (click)="signUp()"></div>
-    <button class="btn btn-primary row mt-2 mr-2" (click)="signUp()">Registrujte Se</button>
-    <span *ngIf="signUpError">{{signUpMessage}}</span>
-    <button class="btn btn-secondary row mt-2 ml-2" (click)="goBack()">Nazad</button>
-    </div>  
+    <form class="p-2" [formGroup]="createAccFormGroup">
+    <h2 class="row justify-content-md-center text-success ">Nemate nalog? </h2>
+    <div class="row text-monospace">Ime : 
+        <input class="form-control" formControlName="name" >
+        <div class="alert alert-danger" *ngIf="createAccFormGroup.get('name').invalid && (createAccFormGroup.get('name').dirty || createAccFormGroup.get('name').touched)" >
+            <div *ngIf="createAccFormGroup.get('name').errors.required">
+                Potrebno je uneti ime.
+            </div>
+            <div *ngIf="createAccFormGroup.get('name').errors.minlength">
+                Ime mora da bude bar 3 karaktera.
+            </div>
+        </div>
+    </div>
+    <div class="row text-monospace">Prezime : 
+        <input class="form-control" formControlName="surname">
+        <div class="alert alert-danger" *ngIf="createAccFormGroup.get('surname').invalid && (createAccFormGroup.get('surname').dirty || createAccFormGroup.get('surname').touched)" >
+                <div *ngIf="createAccFormGroup.get('surname').errors.required">
+                    Potrebno je uneti prezime.
+                </div>
+                <div *ngIf="createAccFormGroup.get('surname').errors.minlength">
+                        Prezime mora da bude bar 3 karaktera.
+                </div>
+        </div>
+    </div>
+    <div class="row text-monospace">Korisnicko Ime : 
+        <input class="form-control" formControlName="username">
+        <div class="alert alert-danger" *ngIf="createAccFormGroup.get('username').invalid && (createAccFormGroup.get('username').dirty || createAccFormGroup.get('username').touched)" >
+                <div *ngIf="createAccFormGroup.get('username').errors.required">
+                    Potrebno je uneti Korisnicko ime.
+                </div>
+                <div *ngIf="createAccFormGroup.get('username').errors.minlength">
+                    Korisnicko ime  mora da bude bar 3 karaktera.
+                </div>
+                <div *ngIf="createAccFormGroup.get('username').errors.pattern">
+                    Korisnicko ime mora da ima bar 1 veliko slovo,malo slovo i broj..
+                </div>
+        </div>
+    </div>
+    <div class="row text-monospace">Lozinka : 
+        <input class="form-control" type="password" formControlName="password">
+        <div class="alert alert-danger" *ngIf="createAccFormGroup.get('password').invalid && (createAccFormGroup.get('password').dirty || createAccFormGroup.get('password').touched)" >
+                <div *ngIf="createAccFormGroup.get('password').errors.required">
+                        Potrebno je uneti Korisnicko ime.
+                </div>
+                <div *ngIf="createAccFormGroup.get('password').errors.minlength">
+                        Lozinka  mora da bude bar 8 karaktera.
+                </div>
+                <div *ngIf="createAccFormGroup.get('password').errors.pattern">
+                        Lozinka  mora da ima bar 1 veliko slovo,malo slovo i broj.
+                </div>
+        </div>
+    </div>
+    <button 
+        class="btn btn-primary row mt-2 mr-2" 
+        [disabled]="!createAccFormGroup.valid"
+        (click)="signUp()">Registrujte Se
+    </button>
+    <button class="btn btn-secondary row mt-2 ml-2"  (click)="goBack()">Nazad</button>
+    <div *ngIf="signUpErrorMessage" class="alert alert-danger">
+        {{signUpErrorMessage}}
+    </div>
+    </form>  
 </div>
