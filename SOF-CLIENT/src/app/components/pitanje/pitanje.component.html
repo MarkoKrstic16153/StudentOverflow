@@ -1,7 +1,7 @@
 <div>
     <div *ngIf="question">
         <h2>{{question.Naslov}}</h2>
-        <label>Autor: {{question.KoJePitao}} Broj odgovora: {{question.Odgovori.length}} Upvotes:{{question.Upvotes}} <button>Upvote</button></label>
+        <label>Autor: {{question.KoJePitao}} Broj odgovora: {{question.Odgovori.length}} Upvotes:{{question.Upvotes}} <button *ngIf="auth()">Upvote</button></label>
         <div><ul><li *ngFor="let tag of question.Tagovi">#{{tag}}</li></ul></div>
         <textarea style=" resize: none;" disabled name="" id="" cols="80" rows="15">{{question.TekstPitanje}}</textarea>
         <h3>Odgovori:</h3>
@@ -12,5 +12,6 @@
         <textarea  style=" resize: none;" name="" id="" cols="80" rows="5"placeholder="Unesite odgovor..." (keyup)="onKeyText($event)"></textarea>
         <button (click)="dodajOdgovor()">Odgovori</button>
         </div>
+        <button (click)="goBack()">Nazad</button>
     </div>
 </div>

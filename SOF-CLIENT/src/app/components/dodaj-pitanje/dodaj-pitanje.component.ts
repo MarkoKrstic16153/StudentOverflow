@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Pitanje } from 'src/models/Pitanje';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class DodajPitanjeComponent implements OnInit {
   addQError:Boolean=false;
   addQMessage:string="";
   question$:Observable<any>;
-  constructor(private route : ActivatedRoute,private questionService: QuestionsService,private location: Location) { }
+  constructor(private route : ActivatedRoute,private router : Router,private questionService: QuestionsService,private location: Location) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -62,8 +62,10 @@ export class DodajPitanjeComponent implements OnInit {
         console.log(novoPitanje);
         this.question$=this.questionService.getQuestion(novoPitanje.Naslov);
         this.question$.subscribe((question)=>{
-          if(question==null)
-            this.questionService.postQuestion(novoPitanje);
+          if(question==null){
+            this.questionService.postQuestion(novoPitanje).subscribe(()=>{this.router.navigate(["pitanje",this.title]);})
+            
+          }
         });
     }
   }

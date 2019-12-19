@@ -1,6 +1,6 @@
 <h3>Pretrazite Pitanja</h3>
 <search-bar></search-bar>
-<button>Pretrazi Najnovija</button>
+<button (click)="fetchNewest()">Pretrazi Najnovija</button>
 <button>Pretrazite Najpopularnija</button>
 <select (change)="onChangeSelect()" [(ngModel)]="selected">
     <option  *ngFor="let tag of tags$ | async" [value]="tag">{{tag}}</option>
@@ -12,4 +12,9 @@
     {{i + 1}} #{{tag}} <button (click)="deleteTag(index)">Obrisi Tag</button>
     </li>
 </ul>
-
+<div *ngIf="newQuestions$">
+<h3 >Pitanja koja odgovaraju pretragi su :</h3>
+<ul>
+    <li *ngFor="let question of newQuestions$ | async" (click)="pogledajPitanje(question)">{{question}}</li>
+</ul>
+</div>

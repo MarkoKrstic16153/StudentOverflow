@@ -44,4 +44,7 @@ export class PitanjeComponent implements OnInit {
   auth():Boolean{
     return this.loginService.loggedUser!="";
   }
+  goBack(){
+    this.location.back();
+  }
 }

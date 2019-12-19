@@ -189,6 +189,7 @@ app.post('/deletequestion', (req, res)=> {
     });
   });
 
+
 app.listen(port, () => console.log(`Moji server listening on port ${port}!`))
 //redisSet("1",JSON.stringify(jsonObjekat));//json u string za bazu
 //redisClient.get("1", redisCallback);

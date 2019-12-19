@@ -1,6 +1,6 @@
 <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input type="text" placeholder="Pretrazi pitanje" aria-label="Question" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <input type="text" placeholder="Pretrazi pitanje" aria-label="Question" matInput [formControl]="myControl" [matAutocomplete]="auto" (keyup.enter)="pretraziTrenutno()">
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let question of filteredQuestions | async" [value]="question">
           {{question}}

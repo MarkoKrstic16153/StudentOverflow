@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pitanje } from 'src/models/Pitanje';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, interval, from } from 'rxjs';
 import { Odgovor } from 'src/models/Odgovor';
+import { take } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class QuestionsService {
@@ -13,16 +14,21 @@ export class QuestionsService {
     urlUserQuestions="http://localhost:3000/userquestions/";
     urlDeleteQuestion="http://localhost:3000/deletequestion";
     urlPostAnswer="http://localhost:3000/addanswer";
+    urlGetNewQuestions="http://localhost:3000/newquestions";
+    
     constructor(private httpClient: HttpClient) { }
     
-    postQuestion(newQuestion:Pitanje){
+    postQuestion(newQuestion:Pitanje):Observable<any>{
         const headers = new HttpHeaders()
           .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
-     this.httpClient.post<Pitanje>(this.ulrQuestionPost,newQuestion,{headers:headers})
+      this.httpClient.post<Pitanje>(this.ulrQuestionPost,newQuestion,{headers:headers})
      .subscribe(data => {
-        console.log(data);
+       console.log(data);
       })
+      const numbers = interval(100);
+      const takeFourNumbers = numbers.pipe(take(1));
+      return takeFourNumbers;
     }
     getUserQuestions(username:string):Observable<string[]>{
         return this.httpClient.get<string[]>(this.urlUserQuestions+username);
@@ -54,5 +60,8 @@ export class QuestionsService {
           .subscribe(data => {
              console.log(data);
            })
+    }
+    getNewQuestions():Observable<string[]>{
+      return this.httpClient.get<string[]>(this.urlGetNewQuestions);
     }
 }

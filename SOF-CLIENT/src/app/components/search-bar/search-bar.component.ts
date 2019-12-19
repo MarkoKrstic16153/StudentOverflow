@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { QuestionsService } from 'src/services/QuestionsService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'search-bar',
@@ -13,7 +14,8 @@ export class SearchBarComponent implements OnInit {
   myControl = new FormControl();
   allquestions:string[]=[];
   filteredQuestions: Observable<string[]>;
-  constructor(private httpService:QuestionsService) { }
+  
+  constructor(private httpService:QuestionsService,private router: Router) { }
 
   async ngOnInit() {
     await this.httpService.getAllQuestions().subscribe(data=>{
@@ -31,6 +33,12 @@ export class SearchBarComponent implements OnInit {
     const filterValue = value.toLowerCase();
     if(value.length>2)
     return this.allquestions.filter(question => question.toLowerCase().includes(filterValue)).slice(0,5);
+  }
+
+  pretraziTrenutno(){
+    console.log(this.myControl.value);
+    //pretrazi iz baze pitanje sa to ime
+    this.router.navigate(["pitanje",this.myControl.value]);
   }
 
 }

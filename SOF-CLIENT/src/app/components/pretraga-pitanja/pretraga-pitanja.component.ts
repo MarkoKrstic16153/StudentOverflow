@@ -3,7 +3,7 @@ import { QuestionsService } from 'src/services/QuestionsService';
 import { Observable } from 'rxjs';
 import { Pitanje } from 'src/models/Pitanje';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-pretraga-pitanja',
@@ -16,7 +16,8 @@ export class PretragaPitanjaComponent implements OnInit {
   selectedTags:string[]=[];
   question$:Observable<any>;
   isLogged:Boolean;
-  constructor(private route : ActivatedRoute,private httpService:QuestionsService,private location:Location) { }
+  newQuestions$:Observable<string[]>;
+  constructor(private route : ActivatedRoute,private httpService:QuestionsService,private location:Location,private router:Router) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -47,7 +48,15 @@ export class PretragaPitanjaComponent implements OnInit {
       console.log(fetchedQuestion);
     });
   }
+
   goBack(){
     this.location.back();
+  }
+  fetchNewest(){
+    this.newQuestions$=this.httpService.getNewQuestions();
+  }
+  pogledajPitanje(naslov:any){
+    console.log(naslov);
+    this.router.navigate(["pitanje",naslov]);
   }
 }
