@@ -64,7 +64,9 @@ export class DodajPitanjeComponent implements OnInit {
         this.question$.subscribe((question)=>{
           if(question==null){
             this.questionService.postQuestion(novoPitanje).subscribe(()=>{this.router.navigate(["pitanje",this.title]);})
-            
+          }
+          else{
+            this.router.navigate(["pitanje",this.title]);
           }
         });
     }

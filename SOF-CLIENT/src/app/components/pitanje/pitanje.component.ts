@@ -37,9 +37,8 @@ export class PitanjeComponent implements OnInit {
   dodajOdgovor(){
     let noviOdgovor:Odgovor={KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor,Upvotes:0};
     console.log(noviOdgovor);
-    this.questionService.addAnswer(noviOdgovor,this.title);
+    this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();});
     this.question=null;
-    this.getAnswers();
   }
   auth():Boolean{
     return this.loginService.loggedUser!="";

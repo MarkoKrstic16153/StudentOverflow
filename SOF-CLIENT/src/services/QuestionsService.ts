@@ -52,7 +52,7 @@ export class QuestionsService {
              console.log(data);
            })
     }
-    addAnswer(answer:Odgovor,naslov:string){
+    addAnswer(answer:Odgovor,naslov:string):Observable<any>{
         const headers = new HttpHeaders()
           .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
@@ -60,6 +60,9 @@ export class QuestionsService {
           .subscribe(data => {
              console.log(data);
            })
+           const numbers = interval(100);
+      const takeFourNumbers = numbers.pipe(take(1));
+      return takeFourNumbers;
     }
     getNewQuestions():Observable<string[]>{
       return this.httpClient.get<string[]>(this.urlGetNewQuestions);

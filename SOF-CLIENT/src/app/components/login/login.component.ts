@@ -15,15 +15,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  // signUpName:string="";
-  // signUpSurname:string="";
-  // signUpUsername:string="";
-  // signUpPassword:string="";
-  // loginError:boolean=false;
-  // signUpError:boolean=false;
   loginErrorMessage:string=null;
   signUpErrorMessage:string=null;
-  //userPassword$:Observable<string>;
   loginFormGroup:FormGroup;
   createAccFormGroup:FormGroup;
   
@@ -98,31 +91,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // onKey0(event:any){
-  //   this.loginUsername=event.target.value;
-  //   this.loginError=false;
-  // }
-  // onKey1(event:any){
-  //   this.loginPassword=event.target.value; 
-  //   this.loginError=false;
-  // }
-  // onKey2(event:any){
-  //   this.signUpName=event.target.value; 
-  //   this.signUpError=false;
-  // }
-  // onKey3(event:any){
-  //   this.signUpSurname=event.target.value;
-  //   this.signUpError=false;
-  // }
-  // onKey4(event:any){
-  //   this.signUpUsername=event.target.value;
-  //   this.signUpError=false;
-  // }
-  // onKey5(event:any){
-  //   this.signUpPassword=event.target.value;
-  //   this.signUpError=false;
-  // }
-  // goBack(){
-  //   this.location.back();
-  // }
+   goBack(){
+     this.location.back();
+   }
 }
