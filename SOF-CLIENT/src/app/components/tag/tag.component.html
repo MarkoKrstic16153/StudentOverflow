@@ -1,0 +1,9 @@
+<h1 class="text-center">#{{Tagname}}</h1>
+<ul class="list-group">
+        <li 
+            class="list-group-item" 
+            *ngFor="let question of questions$ | async" 
+            (click)="Click(question)">
+            {{question}}
+        </li>
+</ul>

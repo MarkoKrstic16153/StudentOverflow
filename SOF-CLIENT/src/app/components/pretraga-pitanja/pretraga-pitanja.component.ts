@@ -34,19 +34,46 @@ export class PretragaPitanjaComponent implements OnInit {
   onChangeSelect(){
     if(this.selected!=""){
     let flag:Boolean=false;
-    this.selectedTags.forEach((element)=>{if(element==this.selected)flag=true;});
+    this.selectedTags.forEach((element)=>{
+      if(element==this.selected)
+        flag=true;
+    });
     if(flag==false)   
       this.selectedTags.push(this.selected);
+    }
+    if(this.selectedTags.length==1)
+    {
+      this.newQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
+    }
+    else if(this.selectedTags.length>1)
+    {
+      this.newQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
     }
   }
 
   deleteTag(index:number){
-    this.selectedTags.splice(index,1);
-    this.question$=this.httpService.getQuestion(" Kako ovo u Javi(Eclipse)?");
-    this.question$.subscribe((question)=>{console.log(question);
-      let fetchedQuestion:Pitanje= {KoJePitao:question.KoJePitao,Upvotes:question.Upvotes,TekstPitanje:question.Tekst,Tagovi:JSON.parse(question.Tagovi),Odgovori:JSON.parse(question.Odgovori),Naslov:" Kako ovo u Javi(Eclipse)?"};
-      console.log(fetchedQuestion);
-    });
+    console.log(this.selectedTags.length);
+    if(this.selectedTags.length==1)
+    {
+      this.selectedTags=[];
+    }
+    else
+    {
+      this.selectedTags.splice(index,1);
+    }
+
+    if(this.selectedTags.length==1)
+    {
+      this.newQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
+    }
+    else if(this.selectedTags.length>1)
+    {
+      this.newQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
+    }
+    else
+    {
+      this.newQuestions$=null;
+    }
   }
 
   goBack(){
@@ -54,6 +81,7 @@ export class PretragaPitanjaComponent implements OnInit {
   }
   fetchNewest(){
     this.newQuestions$=this.httpService.getNewQuestions();
+    this.selectedTags=[];
   }
   pogledajPitanje(naslov:any){
     console.log(naslov);

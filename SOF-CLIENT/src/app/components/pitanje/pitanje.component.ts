@@ -28,17 +28,31 @@ export class PitanjeComponent implements OnInit {
   }
   getAnswers(){
     this.question$=this.questionService.getQuestion(this.title);
-    this.question$.subscribe((q)=>{this.question={KoJePitao:q.KoJePitao,Naslov:this.title,Odgovori:JSON.parse(q.Odgovori),Tagovi:JSON.parse(q.Tagovi),TekstPitanje:q.Tekst,Upvotes:q.Upvotes}});
+    this.question$.subscribe((q)=>{
+      this.question={
+        KoJePitao:q.KoJePitao,
+        Naslov:this.title,
+        Odgovori:JSON.parse(q.Odgovori),
+        Tagovi:JSON.parse(q.Tagovi),
+        TekstPitanje:q.Tekst,
+        Upvotes:q.Upvotes
+      }
+      });
+  }
+  tagClicked(tag:string){
+    this.router.navigate(["tag",tag]);
   }
 
   onKeyText(text){
     this.odgovor=text.target.value;
   }
   dodajOdgovor(){
-    let noviOdgovor:Odgovor={KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor,Upvotes:0};
+    let noviOdgovor:Odgovor={
+      KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor,Upvotes:0
+    };
     console.log(noviOdgovor);
-    this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();});
     this.question=null;
+    this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();});
   }
   auth():Boolean{
     return this.loginService.loggedUser!="";

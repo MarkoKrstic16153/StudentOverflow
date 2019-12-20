@@ -1,7 +1,7 @@
 //allquestions set
 //nova lista
 //tagovi set
-//pojedinacni tag lista
+//pojedinacni tag set
 var redis = require('redis');
 var redisClient = redis.createClient(); 
 
@@ -64,13 +64,13 @@ app.get('/login/:username', function (req, res) {
   app.get('/tag/:tagname', function (req, res) {
     var zahtev=req.params;
     console.log(zahtev.tagname);
-    redisClient.lrange(zahtev.tagname,0,-1,(greska,rezultat) => {
+    redisClient.smembers(zahtev.tagname,(greska,rezultat) => {
         if (greska) {
             console.log(greska);
             throw greska;
         }
         console.log("Tags ->" + rezultat);
-        res.send(JSON.parse(rezultat));
+        res.send(rezultat);
     });
   });
 
@@ -104,6 +104,7 @@ app.post('/register', (req, res)=> {
     redisRegisterUser(req.body);
 });
 
+//get question
 app.post('/question', function (req, res) {
     let naslov=req.body.naslov;
 
@@ -140,11 +141,15 @@ app.post('/addquestion',(req, res)=>{
     redisClient.hset(question.Naslov,"Upvotes",question.Upvotes);
     redisClient.hset(question.Naslov,"Odgovori",JSON.stringify(question.Odgovori));
     question.Tagovi.forEach(tag => {
-        redisClient.lpush(tag,question.Naslov);
+        //pamti za svaki tag pitanja
+        redisClient.sadd(tag,question.Naslov);
     });
+    //dodaje pitanje u nova
     redisClient.lpush("nova",question.Naslov);
     redisClient.rpop("nova");
+    //dodaje pitanjeu sva
     redisClient.sadd("allquestions",question.Naslov);
+    //dodaje pitanje kod usera
     redisClient.hget(question.KoJePitao,"Pitanja",(greska,rezultat) => {
         if (greska) {
             console.log(greska);
@@ -159,6 +164,19 @@ app.post('/addquestion',(req, res)=>{
         redisClient.hset(question.KoJePitao,"Pitanja",JSON.stringify(nizPostavljenihPitanja));
     });
 });
+
+app.post('/tagintersect', function (req, res) {
+    var zahtev=req.body.tags;
+    console.log(zahtev);
+    redisClient.sinter(zahtev,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Tags ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
 
 app.post('/deletequestion', (req, res)=> {
     let naslov=req.body.naslov;

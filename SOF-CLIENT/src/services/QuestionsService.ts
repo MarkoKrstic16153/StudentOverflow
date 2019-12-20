@@ -15,6 +15,8 @@ export class QuestionsService {
     urlDeleteQuestion="http://localhost:3000/deletequestion";
     urlPostAnswer="http://localhost:3000/addanswer";
     urlGetNewQuestions="http://localhost:3000/newquestions";
+    urlGetTagQuestions="http://localhost:3000/tag/";
+    urlGetTagIntersectQuestions="http://localhost:3000/tagintersect";
     
     constructor(private httpClient: HttpClient) { }
     
@@ -66,5 +68,16 @@ export class QuestionsService {
     }
     getNewQuestions():Observable<string[]>{
       return this.httpClient.get<string[]>(this.urlGetNewQuestions);
+    }
+    getTagQuestions(tagName:string):Observable<string[]>
+    {
+      return this.httpClient.get<string[]>(this.urlGetTagQuestions+tagName)
+    }
+    getTagsQuestions(tagNames:string[]):Observable<string[]>
+    {
+      const headers = new HttpHeaders()
+          .set('Authorization', 'my-auth-token')
+          .set('Content-Type', 'application/json');
+      return this.httpClient.post<string[]>(this.urlGetTagIntersectQuestions,{tags:tagNames},{headers:headers});
     }
 }

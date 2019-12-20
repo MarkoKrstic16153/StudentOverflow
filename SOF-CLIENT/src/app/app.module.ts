@@ -15,6 +15,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OdgovorComponent } from './components/odgovor/odgovor.component';
+import { TagComponent } from './components/tag/tag.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { OdgovorComponent } from './components/odgovor/odgovor.component';
     PretragaPitanjaComponent,
     DodajPitanjeComponent,
     SearchBarComponent,
-    OdgovorComponent
+    OdgovorComponent,
+    TagComponent
   ],
   imports: [
     BrowserModule,

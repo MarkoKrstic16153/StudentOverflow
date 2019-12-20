@@ -57,7 +57,8 @@ export class LoginComponent implements OnInit {
         console.log(response.password);
         if(response.password==this.loginFormGroup.get('password').value)
         { 
-          this.httpService.login(this.loginFormGroup.get('username').value);this.router.navigate(["profil",this.loginFormGroup.get('username').value]);
+          this.httpService.login(this.loginFormGroup.get('username').value);
+          this.router.navigate(["profil",this.loginFormGroup.get('username').value]);
           this.loginErrorMessage=null;
         }
         else 

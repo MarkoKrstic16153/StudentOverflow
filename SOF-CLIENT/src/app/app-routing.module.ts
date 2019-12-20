@@ -7,14 +7,16 @@ import { ProfilComponent } from './components/profil/profil.component';
 import { PitanjaComponent } from './components/pitanja/pitanja.component';
 import { PretragaPitanjaComponent } from './components/pretraga-pitanja/pretraga-pitanja.component';
 import { DodajPitanjeComponent } from './components/dodaj-pitanje/dodaj-pitanje.component';
+import { TagComponent } from './components/tag/tag.component';
 
 
 const routes: Routes = [
   {path:'pitanje/:data',component:PitanjeComponent},
   {path:'pitanja',component:PitanjaComponent},
+  {path:'tag/:tag',component:TagComponent},
   {path:'login',component:LoginComponent},
   {path:'profil/:username',component:ProfilComponent},
-  {path: 'pretragapitanja/:username',component:PretragaPitanjaComponent},
+  {path:'pretragapitanja/:username',component:PretragaPitanjaComponent},
   {path:'dodajPitanje/:username',component:DodajPitanjeComponent},
   {path:'',component:HomeComponent},
 ];

@@ -1,20 +1,48 @@
 <h3>Pretrazite Pitanja</h3>
+<button class="btn btn-secondary" (click)="goBack()">Nazad</button>
 <search-bar></search-bar>
-<button (click)="fetchNewest()">Pretrazi Najnovija</button>
-<button>Pretrazite Najpopularnija</button>
-<select (change)="onChangeSelect()" [(ngModel)]="selected">
-    <option  *ngFor="let tag of tags$ | async" [value]="tag">{{tag}}</option>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <button 
+        class="btn btn-info" 
+        (click)="fetchNewest()"
+        >Prikazi najnovija
+    </button>
+    <button class="btn btn-info">Prikazi najpopularnija</button>
+</div>
+<div class="col-2">
+<select
+    class="form-control"
+    (change)="onChangeSelect()" 
+    [(ngModel)]="selected">
+        <option  
+            *ngFor="let tag of tags$ | async"
+            [value]="tag">
+            {{tag}}
+        </option>
 </select>
-<button (click)="goBack()">Nazad</button>
+</div>
+<div>
 <p>Izabrani tagovi su :</p>
-<ul>
-    <li *ngFor="let tag of selectedTags; let i=index;">
-    {{i + 1}} #{{tag}} <button (click)="deleteTag(index)">Obrisi Tag</button>
-    </li>
-</ul>
+</div>
+<div>
+    <button 
+        class="btn btn-outline-dark btn-sm" 
+        (click)="deleteTag(i)" 
+        data-toggle="tooltip"
+        data-placement="bottom" 
+        title="Click to remove tag"
+        *ngFor="let tag of selectedTags; let i=index;">
+        #{{tag}}
+    </button>
+</div>
 <div *ngIf="newQuestions$">
 <h3 >Pitanja koja odgovaraju pretragi su :</h3>
-<ul>
-    <li *ngFor="let question of newQuestions$ | async" (click)="pogledajPitanje(question)">{{question}}</li>
+<ul class="list-group">
+    <li 
+        class="list-group-item text-primary" 
+        *ngFor="let question of newQuestions$ | async" 
+        (click)="pogledajPitanje(question)">
+        {{question}}
+    </li>
 </ul>
 </div>
