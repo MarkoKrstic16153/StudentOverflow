@@ -17,6 +17,7 @@ export class PretragaPitanjaComponent implements OnInit {
   question$:Observable<any>;
   isLogged:Boolean;
   newQuestions$:Observable<string[]>;
+  tagQuestions$:Observable<string[]>;
   constructor(private route : ActivatedRoute,private httpService:QuestionsService,private location:Location,private router:Router) { }
 
   ngOnInit() {
@@ -29,6 +30,8 @@ export class PretragaPitanjaComponent implements OnInit {
       console.log(this.isLogged);
     });
     this.tags$=this.httpService.getTags();
+    this.fetchNewest();
+    //const interval = setInterval(()=>this.fetchNewest(), 10000);
   }
 
   onChangeSelect(){
@@ -43,11 +46,11 @@ export class PretragaPitanjaComponent implements OnInit {
     }
     if(this.selectedTags.length==1)
     {
-      this.newQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
+      this.tagQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
     }
     else if(this.selectedTags.length>1)
     {
-      this.newQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
+      this.tagQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
     }
   }
 
@@ -64,15 +67,15 @@ export class PretragaPitanjaComponent implements OnInit {
 
     if(this.selectedTags.length==1)
     {
-      this.newQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
+      this.tagQuestions$=this.httpService.getTagQuestions(this.selectedTags[0]);
     }
     else if(this.selectedTags.length>1)
     {
-      this.newQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
+      this.tagQuestions$=this.httpService.getTagsQuestions(this.selectedTags);
     }
     else
     {
-      this.newQuestions$=null;
+      this.tagQuestions$=null;
     }
   }
 
@@ -81,10 +84,8 @@ export class PretragaPitanjaComponent implements OnInit {
   }
   fetchNewest(){
     this.newQuestions$=this.httpService.getNewQuestions();
-    this.selectedTags=[];
   }
   pogledajPitanje(naslov:any){
-    console.log(naslov);
     this.router.navigate(["pitanje",naslov]);
   }
 }
