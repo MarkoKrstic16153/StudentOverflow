@@ -1,13 +1,16 @@
 <div class="m-3 p-4"></div>
-<p mt-5>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label> <button *ngIf="auth()" (click)="goBack()">Odjavi Se</button></p>
-<p>Vasa pitanja.</p>
-<ul *ngIf="korisnikovaPitanja$">
-    <li class="col-3" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button *ngIf="auth()" (click)="deleteQuestion(question)">Obrisi</button></li>
+<p mt-5>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label></p>
+<p class="col-3 text-center">Vasa pitanja.</p>
+<ul *ngIf="korisnikovaPitanja$ | async" class="list-group">
+    <li class="col-3 list-group-item" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button class="close" *ngIf="auth()" (click)="deleteQuestion(question)" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
 </ul>
 <div *ngIf="auth()">
 <button (click)="dodajtePitanje()">Dodajte Pitanje</button>
 <button (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
 <button (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
 </div>
-<button *ngIf="!auth()" (click)="goBack()">Nazad</button>
+<div *ngIf="data">
+    <div>Ime: {{data.Ime}}</div>
+    <div>Prezime: {{data.Prezime}}</div>
+</div>
 

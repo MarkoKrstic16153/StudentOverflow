@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { LoginService } from 'src/services/LoginService';
 import { Observable } from 'rxjs';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tag',
@@ -18,7 +17,6 @@ export class TagComponent implements OnInit {
     private router: Router,
     private questionService:QuestionsService,
     private loginService:LoginService,
-    private location:Location
     ) {}
 
   ngOnInit() {
@@ -30,8 +28,5 @@ export class TagComponent implements OnInit {
   Click(question:string)
   {
     this.router.navigate(["pitanje",question]);
-  }
-  goBack(){
-    this.location.back();
   }
 }

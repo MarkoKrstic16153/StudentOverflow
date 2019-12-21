@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { LoginService } from 'src/services/LoginService';
@@ -12,19 +11,28 @@ import { LoginService } from 'src/services/LoginService';
 })
 export class ProfilComponent implements OnInit {
   username:string;
+  data:any;
   pitnja:string[];
   korisnikovaPitanja$:Observable<any>;
-  constructor(private route : ActivatedRoute,private router: Router,private location: Location,private questionService:QuestionsService,private loginService:LoginService) {
+  userData$:Observable<Object>;
+  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService) {
+
    }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
       this.username=Params["username"];
-      console.log(this.username);
     });
+    this.fetchUserData();
     this.fetchQuestions();
   }
-
+  fetchUserData()
+  {
+    this.userData$=this.loginService.getUserData(this.username);
+    this.userData$.subscribe((d)=>{
+      this.data=d;
+    });
+  }
   fetchQuestions(){
     this.korisnikovaPitanja$=this.questionService.getUserQuestions(this.username);
     this.korisnikovaPitanja$.subscribe((pitanja)=>{
@@ -33,9 +41,6 @@ export class ProfilComponent implements OnInit {
   }
   dodajtePitanje(){
     this.router.navigate(["dodajPitanje",this.username]);
-  }
-  goBack(){
-    this.location.back();
   }
   pretrazitePitanja(){
     this.router.navigate(["pretragapitanja",this.username]);

@@ -6,6 +6,7 @@ import { Korisnik } from 'src/models/korisnik';
 @Injectable({providedIn: 'root'})
 export class LoginService {
     urlGet = 'http://localhost:3000/login/';
+    urlGetUserData = 'http://localhost:3000/user/';
     urlPost='http://localhost:3000/register';
     ulrGetAllUsers="http://localhost:3000/allusers";
     loggedUser:string="";
@@ -14,6 +15,9 @@ export class LoginService {
     }
     getKorisnik(param:any):Observable<string> {
         return this.httpClient.get<string>(this.urlGet+param);
+    }
+    getUserData(param:string):Observable<any> {
+        return this.httpClient.get<any>(this.urlGetUserData+param);
     }
     postKorisnik(noviKorisnik:Korisnik){
         const headers = new HttpHeaders()

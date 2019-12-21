@@ -5,7 +5,7 @@
     </div>
 </nav>
 <div>
-<div class="moja">
+<div>
     <div *ngIf="question">
         <h2>{{question.Naslov}}</h2>
         <label>
@@ -30,6 +30,5 @@
         <textarea  style=" resize: none;" name="" id="" cols="80" rows="5"placeholder="Unesite odgovor..." (keyup)="onKeyText($event)"></textarea>
         <button (click)="dodajOdgovor()">Odgovori</button>
         </div>
-        <button (click)="goBack()">Nazad</button>
     </div>
 </div>

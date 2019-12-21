@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { Observable } from 'rxjs';
-import { Pitanje } from 'src/models/Pitanje';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -18,7 +16,7 @@ export class PretragaPitanjaComponent implements OnInit {
   isLogged:Boolean;
   newQuestions$:Observable<string[]>;
   tagQuestions$:Observable<string[]>;
-  constructor(private route : ActivatedRoute,private httpService:QuestionsService,private location:Location,private router:Router) { }
+  constructor(private route : ActivatedRoute,private httpService:QuestionsService,private router:Router) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -77,10 +75,6 @@ export class PretragaPitanjaComponent implements OnInit {
     {
       this.tagQuestions$=null;
     }
-  }
-
-  goBack(){
-    this.location.back();
   }
   fetchNewest(){
     this.newQuestions$=this.httpService.getNewQuestions();

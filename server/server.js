@@ -40,6 +40,20 @@ app.get('/login/:username', function (req, res) {
     });
   });
 
+app.get('/user/:username', function (req, res) {
+    var zahtev=req.params;
+    console.log(zahtev.username);
+    redisClient.hgetall(zahtev.username,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+
+        console.log("GET-ovao ->" + rezultat);
+        res.send({Ime:rezultat.Ime,Prezime:rezultat.Prezime});
+    });
+  });
+
   app.get('/tags', function (req, res) {
     redisClient.smembers("tags",(greska,rezultat) => {
         if (greska) {

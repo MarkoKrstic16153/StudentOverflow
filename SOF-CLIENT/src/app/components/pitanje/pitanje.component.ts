@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { Observable } from 'rxjs';
 import { Pitanje } from 'src/models/Pitanje';
@@ -17,7 +16,7 @@ export class PitanjeComponent implements OnInit {
   question$:Observable<any>;
   question:Pitanje;
   odgovor:string="";
-  constructor(private route : ActivatedRoute,private router: Router,private location: Location,private questionService:QuestionsService,private loginService:LoginService) { }
+  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -56,9 +55,6 @@ export class PitanjeComponent implements OnInit {
   }
   auth():Boolean{
     return this.loginService.loggedUser!="";
-  }
-  goBack(){
-    this.location.back();
   }
   vidiProfil(user:string){
     console.log(user);
