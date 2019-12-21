@@ -7,7 +7,8 @@ import { Korisnik } from 'src/models/korisnik';
 export class LoginService {
     urlGet = 'http://localhost:3000/login/';
     urlPost='http://localhost:3000/register';
-    loggedUser:string;
+    ulrGetAllUsers="http://localhost:3000/allusers";
+    loggedUser:string="";
     constructor(private httpClient: HttpClient) { 
       
     }
@@ -25,5 +26,8 @@ export class LoginService {
     }
     login(username:string){
       this.loggedUser=username;
+    }
+    getAllUsers():Observable<string[]> {
+      return this.httpClient.get<string[]>(this.ulrGetAllUsers);
     }
 }

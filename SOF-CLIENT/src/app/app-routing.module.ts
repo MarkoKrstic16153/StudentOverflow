@@ -8,6 +8,7 @@ import { PitanjaComponent } from './components/pitanja/pitanja.component';
 import { PretragaPitanjaComponent } from './components/pretraga-pitanja/pretraga-pitanja.component';
 import { DodajPitanjeComponent } from './components/dodaj-pitanje/dodaj-pitanje.component';
 import { TagComponent } from './components/tag/tag.component';
+import { SerachUserComponent } from './components/serach-user/serach-user.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path:'profil/:username',component:ProfilComponent},
   {path:'pretragapitanja/:username',component:PretragaPitanjaComponent},
   {path:'dodajPitanje/:username',component:DodajPitanjeComponent},
+  {path:'profilSearch',component:SerachUserComponent},
   {path:'',component:HomeComponent},
 ];
 

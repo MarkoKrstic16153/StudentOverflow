@@ -2,7 +2,12 @@
 <p mt-5>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label> <button *ngIf="auth()" (click)="goBack()">Odjavi Se</button></p>
 <p>Vasa pitanja.</p>
 <ul *ngIf="korisnikovaPitanja$">
-    <li class="col-3" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button (click)="deleteQuestion(question)">Obrisi</button></li>
+    <li class="col-3" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button *ngIf="auth()" (click)="deleteQuestion(question)">Obrisi</button></li>
 </ul>
+<div *ngIf="auth()">
 <button (click)="dodajtePitanje()">Dodajte Pitanje</button>
 <button (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
+<button (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
+</div>
+<button *ngIf="!auth()" (click)="goBack()">Nazad</button>
+

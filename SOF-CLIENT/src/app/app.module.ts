@@ -16,6 +16,7 @@ import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OdgovorComponent } from './components/odgovor/odgovor.component';
 import { TagComponent } from './components/tag/tag.component';
+import { SerachUserComponent } from './components/serach-user/serach-user.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { TagComponent } from './components/tag/tag.component';
     DodajPitanjeComponent,
     SearchBarComponent,
     OdgovorComponent,
-    TagComponent
+    TagComponent,
+    SerachUserComponent
   ],
   imports: [
     BrowserModule,

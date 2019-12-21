@@ -5,10 +5,11 @@
     </div>
 </nav>
 <div>
+<div class="moja">
     <div *ngIf="question">
         <h2>{{question.Naslov}}</h2>
         <label>
-            Autor: {{question.KoJePitao}} 
+            <label (click)="vidiProfil(question.KoJePitao)">Autor: {{question.KoJePitao}} </label>
             Broj odgovora: {{question.Odgovori.length}} 
             Upvotes:{{question.Upvotes}} 
             <button *ngIf="auth()">Upvote</button>

@@ -1,0 +1,15 @@
+<div class="moja">
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Pretrazi Korisnike" aria-label="Question" matInput [formControl]="myControl" [matAutocomplete]="auto" (keyup.enter)="pretraziTrenutno()">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+          {{user}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <button (click)="goBack()">Nazad</button>
+</div>
+  
+  
