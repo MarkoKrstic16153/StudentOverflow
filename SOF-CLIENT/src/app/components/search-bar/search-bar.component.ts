@@ -36,8 +36,6 @@ export class SearchBarComponent implements OnInit {
   }
 
   pretraziTrenutno(){
-    console.log(this.myControl.value);
-    //pretrazi iz baze pitanje sa to ime
     this.router.navigate(["pitanje",this.myControl.value]);
   }
 

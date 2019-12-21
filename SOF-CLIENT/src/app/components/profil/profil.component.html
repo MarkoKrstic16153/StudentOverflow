@@ -1,7 +1,7 @@
 <p>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label> <button (click)="goBack()">Odjavi Se</button></p>
 <p>Vasa pitanja.</p>
 <ul *ngIf="korisnikovaPitanja$">
-    <li *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button (click)="deleteQuestion(question)">Obrisi</button></li>
+    <li class="col-3" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button (click)="deleteQuestion(question)">Obrisi</button></li>
 </ul>
 <button (click)="dodajtePitanje()">Dodajte Pitanje</button>
 <button (click)="pretrazitePitanja()">Pretrazite Pitanja</button>

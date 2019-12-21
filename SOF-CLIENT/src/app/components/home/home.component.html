@@ -1,16 +1,54 @@
-<article>
-        <a routerLink="/login" >Login</a>
-        <a routerLink="/pretragapitanja/#">Pretraga Pitanja</a>
-</article>
 <router-outlet></router-outlet>
-<div>
-        Student Overflow je platforma koja je dizajnirana specijalno za potrebe studenata kao alat .
+<div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+                <div class="carousel-item active" data-interval="3000">
+                <img src="../../../assets/pictures/Students_wallapper.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block bg-info rounded-pill">
+                        <div>
+                                Student Overflow je platforma koja je dizajnirana specijalno za potrebe studenata kao alat .
+                        </div>
+                </div>
+        </div>
+        <div class="carousel-item" data-interval="5000">
+                <img src="../../../assets/pictures/Students_wallapper.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block bg-info rounded-pill">
+                                <div>
+                                                Razvijena je od strane studentskog tima koji je upoznat sa problemom sa kojim se studenti svakodnevno susrecu na polju pretrazivanja informacija, nalazenja odgovara na pitanja po brojnim sajtovima koji, nude previse ili premalo informacija, ili su pak korisne informacije skrivene i tesko dostupne .
+                                </div>
+                        </div>
+        </div>
+        <div class="carousel-item" data-interval="5000">
+                <img src="../../../assets/pictures/Students_wallapper.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block bg-info rounded-pill">
+                                <div>
+                                                Nasa platforma ima za cilj da ovaj problem resi stvaranjem baze znanja koju upisuju i pretrazuju samo studenti, zato ce se tu, uglavnom, odgovarati na pitanja vezana za gradivo sa ispita. 
+                                </div>
+                        </div>
+        </div>
+        <div class="carousel-item" data-interval="5000">
+                <img src="../../../assets/pictures/Students_wallapper.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block bg-info rounded-pill">
+                                <div>
+                                                Na vase postavljeno pitanje ce odgovarati sami korisnici platforme koji ce znati kako da na najbolji i prvenstveno najkoncizniji nacin pomognu svojim kolegama u savladavanju gradiva. Ova platforma nudi mogucnost lakog i intuitivnog pretrazivanja gomile pitanja i odgovora i mogucnost vrednovanja istih.
+                                </div>
+                        </div>
+        </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span> -->
+                <img src="../../../assets/icons/arrow_back-24px.svg" style="width:50px" alt="">
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                <!-- <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span> -->
+                <img src="../../../assets/icons/arrow_forward-24px.svg" style="width:50px" alt="">
+        </a>
 </div>
-<div>
-        Razvijena je od strane studentskog tima koji je upoznat sa problemom sa kojim se studenti svakodnevno susrecu na polju pretrazivanja informacija, nalazenja odgovara na pitanja po brojnim sajtovima koji, nude previse ili premalo informacija, ili su pak korisne informacije skrivene i tesko dostupne.
-        Nasa platforma ima za cilj da ovaj problem resi stvaranjem baze znanja koju upisuju i pretrazuju samo studenti, zato ce se tu, uglavnom, odgovarati na pitanja vezana za gradivo sa ispita. 
-        Na vase postavljeno pitanje ce odgovarati sami korisnici platforme koji ce znati kako da na najbolji i prvenstveno najkoncizniji nacin pomognu svojim kolegama u savladavanju gradiva. Ova platforma nudi mogucnost lakog i intuitivnog pretrazivanja gomile pitanja i odgovora i mogucnost vrednovanja istih.
-</div>
-<div>
-        Sta cekas, lakse polaganje ispita je na klik od tebe, napravi korisnicki nalog i postani deo Overflow zajednice i ucini svoje i tudje studiranje laksim. 
+<div class="jumbotron m-1">
+        <h1 class="display-4">Sta cekas?</h1>
+        <p class="lead">Lakse polaganje ispita je na klik od tebe.</p>
+        <hr class="my-4">
+        <p>Napravi korisnicki nalog i postani deo Overflow zajednice i ucini svoje i tudje studiranje laksim.</p>
+        <a class="btn btn-primary btn-lg" [routerLink]="['/login']" role="button">Prijavi se</a>
 </div>

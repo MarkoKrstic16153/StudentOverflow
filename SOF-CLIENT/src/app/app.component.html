@@ -1,5 +1,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-    <a class="navbar-brand" href="/">Student Overflow</a>
+    <div class="navbar-brand">
+        <img style="height: 50px;" src="../assets/icons/icons8-books-96.png" alt="">
+        Student Overflow
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+        <a class="nav-item nav-link" [class.active]="currentURL=='/'" [routerLink]="['/']" >Početna strana</a>
+        <a class="nav-item nav-link"  [class.active]="currentURL=='/pretragapitanja/%23'" [routerLink]="['/pretragapitanja/%23']">Pretraga</a>
+        <a class="nav-item nav-link" [class.active]="currentURL=='/login'" [routerLink]="['/login']">Prijavi se</a>
+        </div>
+  </div>
 </nav>
 
 <router-outlet></router-outlet>
