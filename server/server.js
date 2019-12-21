@@ -2,6 +2,7 @@
 //nova lista
 //tagovi set
 //pojedinacni tag set
+//allusers
 var redis = require('redis');
 var redisClient = redis.createClient(); 
 
@@ -98,10 +99,22 @@ app.get('/login/:username', function (req, res) {
     });
   });
 
+  app.get('/allusers', function (req, res) {
+    redisClient.smembers("allusers",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Svi useri su ->" + rezultat);
+        res.send(rezultat);
+    });
+  });
+
 //#region POST
 app.post('/register', (req, res)=> {
     console.log(req.body);
     redisRegisterUser(req.body);
+    redisClient.sadd("allusers",req.body.Username);
 });
 
 //get question

@@ -48,7 +48,7 @@ export class PitanjeComponent implements OnInit {
   }
   dodajOdgovor(){
     let noviOdgovor:Odgovor={
-      KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor,Upvotes:0
+      KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor
     };
     console.log(noviOdgovor);
     this.question=null;
@@ -59,5 +59,9 @@ export class PitanjeComponent implements OnInit {
   }
   goBack(){
     this.location.back();
+  }
+  vidiProfil(user:string){
+    console.log(user);
+    this.router.navigate(["profil",user]);
   }
 }

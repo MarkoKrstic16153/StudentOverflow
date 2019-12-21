@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Odgovor } from 'src/models/Odgovor';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'odgovor',
@@ -8,9 +9,12 @@ import { Odgovor } from 'src/models/Odgovor';
 })
 export class OdgovorComponent implements OnInit {
   @Input() odgovor: Odgovor;
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit() {
   }
-
+  vidiProfil(user:string){
+    console.log(user);
+    this.router.navigate(["profil",user]);
+  }
 }

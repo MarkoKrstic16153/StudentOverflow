@@ -51,5 +51,8 @@ export class ProfilComponent implements OnInit {
   showQuestion(question:string){
     this.router.navigate(["pitanje",question]);
   }
+  pretraziteKorisnike(){
+    this.router.navigate(["profilSearch"]);
+  }
 }
 
