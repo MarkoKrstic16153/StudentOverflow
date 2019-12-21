@@ -23,12 +23,16 @@ export class LoginComponent implements OnInit {
   constructor(private httpService:LoginService,private router: Router,private location:Location) { }
 
   ngOnInit() {
+    if(this.httpService.loggedUser)
+    {
+      this.router.navigate(["/"]);
+    }
     this.loginFormGroup=new FormGroup(
       {
         'username':new FormControl('',Validators.required),
         'password':new FormControl('',Validators.required)
-      }
-    )
+      })
+     
     this.createAccFormGroup=new FormGroup(
       {
         'username':new FormControl('',
@@ -51,8 +55,6 @@ export class LoginComponent implements OnInit {
 
   login() {
       let userPassword$=this.httpService.getKorisnik(this.loginFormGroup.get('username').value);
-      console.log(this.loginFormGroup.get('username').value);
-      console.log(this.loginFormGroup.get('password').value);
       userPassword$.subscribe((response:any) => {
         console.log(response.password);
         if(response.password==this.loginFormGroup.get('password').value)
