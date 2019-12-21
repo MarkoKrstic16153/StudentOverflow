@@ -7,7 +7,7 @@ import { Korisnik } from 'src/models/korisnik';
 export class LoginService {
     urlGet = 'http://localhost:3000/login/';
     urlPost='http://localhost:3000/register';
-    loggedUser:string="";
+    loggedUser:string;
     constructor(private httpClient: HttpClient) { 
       
     }

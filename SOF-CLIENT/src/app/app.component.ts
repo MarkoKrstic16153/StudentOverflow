@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { LoginService } from 'src/services/LoginService';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,14 @@ import { Observable } from 'rxjs';
 export class AppComponent {
   title = 'Student Overflow';
   currentURL:Observable<any>;
-  constructor(private route : ActivatedRoute,private router:Router) {
+  constructor(private route : ActivatedRoute,private router:Router,private login:LoginService) {
     
   }
   ngOnInit() {
     this.currentURL=this.route.url;
+  }
+  logout()
+  {
+    this.login.loggedUser=null;
   }
 }

@@ -1,4 +1,5 @@
-<p>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label> <button (click)="goBack()">Odjavi Se</button></p>
+<div class="m-3 p-4"></div>
+<p mt-5>Profil {{username}}. <label *ngIf="auth()">Dobrodosli Nazad!</label> <button *ngIf="auth()" (click)="goBack()">Odjavi Se</button></p>
 <p>Vasa pitanja.</p>
 <ul *ngIf="korisnikovaPitanja$">
     <li class="col-3" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button (click)="deleteQuestion(question)">Obrisi</button></li>

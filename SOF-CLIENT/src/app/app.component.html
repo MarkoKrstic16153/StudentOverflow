@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary row fixed-top">
     <div class="navbar-brand">
         <img style="height: 50px;" src="../assets/icons/icons8-books-96.png" alt="">
         Student Overflow
@@ -10,8 +10,12 @@
         <div class="navbar-nav">
         <a class="nav-item nav-link" [class.active]="currentURL=='/'" [routerLink]="['/']" >Početna strana</a>
         <a class="nav-item nav-link"  [class.active]="currentURL=='/pretragapitanja/%23'" [routerLink]="['/pretragapitanja/%23']">Pretraga</a>
-        <a class="nav-item nav-link" [class.active]="currentURL=='/login'" [routerLink]="['/login']">Prijavi se</a>
-        </div>
+        <a *ngIf="!login.loggedUser;else loggedIn" class="nav-item nav-link" [class.active]="currentURL=='/login'" [routerLink]="['/login']">Prijavi se</a>
+        <ng-template #loggedIn>
+            <a class="nav-item nav-link" [class.active]="currentURL=='/'" [routerLink]="['/']" (click)="logout()">Izloguje se</a>
+          </ng-template>
+        
+    </div>
   </div>
 </nav>
 
