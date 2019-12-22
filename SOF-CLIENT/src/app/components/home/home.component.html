@@ -45,7 +45,7 @@
                 <img src="../../../assets/icons/arrow_forward-24px.svg" style="width:50px" alt="">
         </a>
 </div>
-<div class="jumbotron m-1">
+<div class="jumbotron m-1" *ngIf="!login.loggedUser">
         <h1 class="display-4">Sta cekas?</h1>
         <p class="lead">Lakse polaganje ispita je na klik od tebe.</p>
         <hr class="my-4">

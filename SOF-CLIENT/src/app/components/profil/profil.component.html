@@ -5,24 +5,27 @@
     </div>
 </nav>
 <div class="row">
-    <div class="col-6 p-2">
-        <p mt-5>Username: {{username}}.</p>
+    <div class="col-6" *ngIf="data">
+        <h2 class="text-center">Korisnicki podaci:</h2>
+        <div class="container border border-primary p-5">
+            <p class="row text-monospace">Korisnicko ime: {{username}}</p>
+            <p class="row text-monospace">Ime: {{data.Ime}}</p>
+            <p class="row text-monospace">Prezime: {{data.Prezime}}</p>
+        </div>
     </div>
     <div class="col-6 p-2">
         <h3 class="text-center">Vasa pitanja.</h3>
-        <ul *ngIf="korisnikovaPitanja$ | async" class="list-group">
-            <li class="col-3 list-group-item" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button class="close" *ngIf="auth()" (click)="deleteQuestion(question)" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
-        </ul>
+        <div class="container" id="pitanja">
+            <div *ngIf="korisnikovaPitanja$ | async" class="row row-cols-3">
+                <div class="col border border-success rounded text-center bg-light" *ngFor="let question of korisnikovaPitanja$ | async" (click)="showQuestion(question)">{{question}}<button class="close" *ngIf="auth()" (click)="deleteQuestion(question)" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div *ngIf="auth()">
-<button (click)="dodajtePitanje()">Dodajte Pitanje</button>
-<button (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
-<button (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
-</div>
-<div *ngIf="data">
-    <div>Ime: {{data.Ime}}</div>
-    <div>Prezime: {{data.Prezime}}</div>
+<button class="btn btn-primary" (click)="dodajtePitanje()">Dodajte Pitanje</button>
+<button class="btn btn-primary" (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
+<button class="btn btn-primary" (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
 </div>
 

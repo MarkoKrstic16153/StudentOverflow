@@ -26,4 +26,8 @@ export class AppComponent {
   {
     this.location.back()
   }
+  goProfile()
+  {
+    this.router.navigate(["profil",this.login.loggedUser]);
+  }
 }

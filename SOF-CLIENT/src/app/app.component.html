@@ -19,6 +19,7 @@
         <a *ngIf="!login.loggedUser;else loggedIn" class="nav-item nav-link text-dark" [class.active]="currentURL=='/login'" [routerLink]="['/login']">Prijavi se</a>
         <a  class="nav-item nav-link text-dark" (click)="goBack()">Nazad</a>
         <ng-template #loggedIn>
+            <a class="nav-item nav-link text-dark" [class.active]="currentURL=='/'" (click)="goProfile()">Profil</a>
             <a class="nav-item nav-link text-dark" [class.active]="currentURL=='/'" [routerLink]="['/']" (click)="logout()">Izloguje se</a>
           </ng-template>
     </div>
