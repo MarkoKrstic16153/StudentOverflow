@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pitanje } from 'src/models/Pitanje';
-import { Observable, Subscription, interval, from } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { Odgovor } from 'src/models/Odgovor';
 import { take } from 'rxjs/operators';
 
@@ -17,6 +17,8 @@ export class QuestionsService {
     urlGetNewQuestions="http://localhost:3000/newquestions";
     urlGetTagQuestions="http://localhost:3000/tag/";
     urlGetTagIntersectQuestions="http://localhost:3000/tagintersect";
+    urlPostUpvote="http://localhost:3000/upvote";
+    urlGetLikedQuestions="http://localhost:3000/liked/";
     
     constructor(private httpClient: HttpClient) { }
     
@@ -79,5 +81,20 @@ export class QuestionsService {
           .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
       return this.httpClient.post<string[]>(this.urlGetTagIntersectQuestions,{tags:tagNames},{headers:headers});
+    }
+    postUpvote(naslov:string,username:string):Observable<any>{
+      const headers = new HttpHeaders()
+          .set('Authorization', 'my-auth-token')
+          .set('Content-Type', 'application/json');
+      this.httpClient.post<any>(this.urlPostUpvote,{naslov:naslov,username:username},{headers:headers})
+     .subscribe(data => {
+       console.log(data);
+      })
+      const numbers = interval(100);
+      const takeFourNumbers = numbers.pipe(take(1));
+      return takeFourNumbers;
+    }
+    getLikedQuestions(user:string):Observable<string[]>{
+      return this.httpClient.get<string[]>(this.urlGetLikedQuestions+user);
     }
 }

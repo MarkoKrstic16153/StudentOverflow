@@ -12,7 +12,7 @@
             <label (click)="vidiProfil(question.KoJePitao)">Autor: {{question.KoJePitao}} </label>
             Broj odgovora: {{question.Odgovori.length}} 
             Upvotes:{{question.Upvotes}} 
-            <button *ngIf="auth()">Upvote</button>
+            <button *ngIf="auth() && !daLiJeLajkovao() && likedQuestions" (click)="upvote(question.Naslov)">Upvote</button>
         </label>
         <div>
         <ul class="nav">

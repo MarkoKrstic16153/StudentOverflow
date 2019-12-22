@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Pitanje } from 'src/models/Pitanje';
 import { Odgovor } from 'src/models/Odgovor';
 import { LoginService } from 'src/services/LoginService';
+import { BindingFlags } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-pitanje',
@@ -16,6 +17,7 @@ export class PitanjeComponent implements OnInit {
   question$:Observable<any>;
   question:Pitanje;
   odgovor:string="";
+  likedQuestions:string[]=[];
   constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService) { }
 
   ngOnInit() {
@@ -26,6 +28,11 @@ export class PitanjeComponent implements OnInit {
     this.getAnswers();
   }
   getAnswers(){
+    if(this.auth()){
+      this.questionService.getLikedQuestions(this.loginService.loggedUser).subscribe((data)=>{this.likedQuestions=data;
+      this.daLiJeLajkovao();
+      });
+    }
     this.question$=this.questionService.getQuestion(this.title);
     this.question$.subscribe((q)=>{
       this.question={
@@ -59,5 +66,17 @@ export class PitanjeComponent implements OnInit {
   vidiProfil(user:string){
     console.log(user);
     this.router.navigate(["profil",user]);
+  }
+  upvote(naslov:string){
+    console.log(naslov);
+    this.questionService.postUpvote(naslov,this.loginService.loggedUser).subscribe(()=>{this.getAnswers()});
+  }
+  daLiJeLajkovao():Boolean{
+    let flag=false;
+    this.likedQuestions.forEach((pitanje)=>{
+      if(this.title==pitanje)
+      flag=true;
+    });
+    return flag;
   }
 }

@@ -1,8 +1,3 @@
-//allquestions set
-//nova lista
-//tagovi set
-//pojedinacni tag set
-//allusers
 var redis = require('redis');
 var redisClient = redis.createClient(); 
 
@@ -51,6 +46,20 @@ app.get('/user/:username', function (req, res) {
 
         console.log("GET-ovao ->" + rezultat);
         res.send({Ime:rezultat.Ime,Prezime:rezultat.Prezime});
+    });
+  });
+
+  app.get('/liked/:username', function (req, res) {
+    var zahtev=req.params;
+    console.log(zahtev.username);
+    redisClient.hget(zahtev.username,"Liked",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+
+        console.log("GET-ovao ->" + rezultat);
+        res.send(JSON.parse(rezultat));
     });
   });
 
@@ -146,6 +155,34 @@ app.post('/question', function (req, res) {
     });
   });
 
+  app.post('/upvote', function (req, res) {
+    let naslov=req.body.naslov;
+    let username=req.body.username;
+    console.log('naslov');
+    console.log(username);
+    redisClient.hget(naslov,"Upvotes",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+
+        console.log("GET-ovao ->" + rezultat);
+        let noviUpvote=JSON.parse(rezultat);
+        noviUpvote++;
+        redisClient.hset(naslov,"Upvotes",noviUpvote);
+        redisClient.hget(username,"Liked",(greska1,rezultat1)=>{
+            if (greska1) {
+                console.log(greska1);
+                throw greska1;
+            }
+            let Liked=JSON.parse(rezultat1);
+            Liked.push(naslov);
+            redisClient.hset(username,"Liked",JSON.stringify(Liked));
+        });
+    });
+  });
+
+
 app.post('/addquestion',(req, res)=>{
     let question=req.body; 
     console.log(question);
@@ -231,6 +268,15 @@ app.post('/deletequestion', (req, res)=> {
         let odgovori=JSON.parse(rezultat);
         odgovori.push(zahtev.odgovor);
         redisClient.hset(zahtev.naslov,"Odgovori",JSON.stringify(odgovori));
+        redisClient.hget(zahtev.odgovor.KoJeOdgovorio,"Rank",(greska1,rezultat1) =>{ if (greska1) {
+            console.log(greska1);
+            throw greska1;
+
+        }
+        let stariRank=JSON.parse(rezultat1);
+        let noviRank = stariRank+1;
+        redisClient.hset(zahtev.odgovor.KoJeOdgovorio,"Rank",noviRank);
+    })
     });
   });
 
@@ -244,6 +290,7 @@ function redisRegisterUser(user) {
    redisClient.hset(user.Username,"Ime",user.Ime);
    redisClient.hset(user.Username,"Prezime",user.Prezime);
    redisClient.hset(user.Username,"Pitanja","[]");
+   redisClient.hset(user.Username,"Liked","[]");
 }
 
 function deleteQuestionFromUser(question,user){
