@@ -11,7 +11,7 @@
     <div class="row text-monospace">Korisnicko Ime : <input class="form-control" formControlName="username"></div>
     <div class="row text-monospace">Lozinka : <input class="form-control"  formControlName="password" type="password" (keyup.enter)="login()"></div>
 
-    <div class="row"><button class="btn btn-primary mt-2" [disabled]="!loginFormGroup.valid" (click)="login()">Prijavite Se</button></div>
+    <div class="row"><button [disabled]="!loginFormGroup.valid" [class]="loginFormGroup.valid ? 'btn btn-success mt-2':'btn btn-primary mt-2'" (click)="login()">Prijavite Se</button></div>
     
         <div *ngIf="loginErrorMessage" class="alert alert-danger">
             Pogresili ste korisnicko ime ili sifru!!!
@@ -75,6 +75,7 @@
     <button 
         class="btn btn-primary row mt-2 mr-2" 
         [disabled]="!createAccFormGroup.valid"
+        [class]="createAccFormGroup.valid ? 'btn btn-success row mt-2 mr-2':'btn btn-primary row mt-2 mr-2'"
         (click)="signUp()">Registrujte Se
     </button>
     <button class="btn btn-secondary row mt-2 ml-2"  (click)="goBack()">Nazad</button>

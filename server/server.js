@@ -45,7 +45,7 @@ app.get('/user/:username', function (req, res) {
         }
 
         console.log("GET-ovao ->" + rezultat);
-        res.send({Ime:rezultat.Ime,Prezime:rezultat.Prezime});
+        res.send({Ime:rezultat.Ime,Prezime:rezultat.Prezime,Rank:rezultat.Rank});
     });
   });
 

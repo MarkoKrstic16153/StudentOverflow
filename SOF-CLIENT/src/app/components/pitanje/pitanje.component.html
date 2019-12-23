@@ -5,30 +5,39 @@
     </div>
 </nav>
 <div>
-<div>
+<div class="container">
     <div *ngIf="question">
-        <h2>{{question.Naslov}}</h2>
-        <label>
-            <label (click)="vidiProfil(question.KoJePitao)">Autor: {{question.KoJePitao}} </label>
-            Broj odgovora: {{question.Odgovori.length}} 
-            Upvotes:{{question.Upvotes}} 
-            <button *ngIf="auth() && !daLiJeLajkovao() && likedQuestions" (click)="upvote(question.Naslov)">Upvote</button>
-        </label>
+        <h2 class="text-center">{{question.Naslov}}</h2>
+        <div class="row justify-content-center">
+            <div for="btnProfile" class="m-2">
+                    Autor:
+                <a id="btnProfile nav-link" (click)="vidiProfil(question.KoJePitao)" class="text-primary">
+                    {{question.KoJePitao}}
+                </a>
+            </div>
+            <div class="m-2" >Broj odgovora: {{question.Odgovori.length}}</div> 
+            <div class="m-2" >Upvotes:{{question.Upvotes}}</div> 
+            <button class="btn btn-link align-baseline" *ngIf="auth() && !daLiJeLajkovao() && likedQuestions" (click)="upvote(question.Naslov)">
+                    <img class="img-fluid" src="../../../assets/icons/upvote.svg" style="width:30px" alt="upvote">
+            </button>
+        </div>
         <div>
-        <ul class="nav">
+        <ul class="nav row justify-content-center">
             <li class="nav-item" *ngFor="let tag of question.Tagovi">
                 <button class="btn btn-link" href="" (click)="tagClicked(tag)" >#{{tag}}</button>
              </li>
         </ul>
         </div>
-        <textarea style=" resize: none;" disabled name="" id="" cols="80" rows="15">{{question.TekstPitanje}}</textarea>
+        <div class="row justify-content-center">
+            <textarea class="form-control" style=" resize: none;" [disabled]="this.loginService.loggedUser!=question.KoJePitao" rows="15">{{question.TekstPitanje}}</textarea>
+        </div>
         <h3>Odgovori:</h3>
         <ul *ngIf="question">
             <odgovor [odgovor]="odgovor" *ngFor="let odgovor of question.Odgovori"></odgovor>
         </ul>
         <div *ngIf="auth()">
-        <textarea  style=" resize: none;" name="" id="" cols="80" rows="5"placeholder="Unesite odgovor..." (keyup)="onKeyText($event)"></textarea>
-        <button (click)="dodajOdgovor()">Odgovori</button>
+        <textarea class="row form-control" style=" resize: none;" rows="5" placeholder="Unesite odgovor..." (keyup)="onKeyText($event)"></textarea>
+        <button class="row btn btn-primary mt-2" (click)="dodajOdgovor()">Odgovori</button>
         </div>
     </div>
 </div>
