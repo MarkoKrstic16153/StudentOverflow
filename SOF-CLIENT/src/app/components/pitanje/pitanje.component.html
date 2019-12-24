@@ -32,9 +32,9 @@
             <textarea class="form-control" style=" resize: none;" [disabled]="this.loginService.loggedUser!=question.KoJePitao" rows="15">{{question.TekstPitanje}}</textarea>
         </div>
         <h3>Odgovori:</h3>
-        <ul *ngIf="question">
+        <div *ngIf="question">
             <odgovor [odgovor]="odgovor" *ngFor="let odgovor of question.Odgovori"></odgovor>
-        </ul>
+        </div>
         <div *ngIf="auth()">
         <textarea class="row form-control" style=" resize: none;" rows="5" placeholder="Unesite odgovor..." (keyup)="onKeyText($event)"></textarea>
         <button class="row btn btn-primary mt-2" (click)="dodajOdgovor()">Odgovori</button>

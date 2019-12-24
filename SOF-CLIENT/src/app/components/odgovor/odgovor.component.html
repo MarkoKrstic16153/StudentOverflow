@@ -1,3 +1,9 @@
-<p>{{odgovor.Tekst}}
- <label (click)="vidiProfil(odgovor.KoJeOdgovorio)"> Autor: {{odgovor.KoJeOdgovorio}}</label>
- </p>
+<div class="container border border-info rounded m-2">
+    <div class="row border border-info p-3">
+        {{odgovor.Tekst}}
+    </div>
+    <div class="row p-1">
+            Autor: 
+            <a class="text-primary" (click)="vidiProfil(odgovor.KoJeOdgovorio)">{{odgovor.KoJeOdgovorio}}</a>
+    </div>
+</div>

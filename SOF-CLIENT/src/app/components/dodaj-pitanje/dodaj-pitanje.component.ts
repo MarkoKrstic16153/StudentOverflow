@@ -71,7 +71,4 @@ export class DodajPitanjeComponent implements OnInit {
         });
     }
   }
-  goBack(){
-    this.location.back();
-  }
 }

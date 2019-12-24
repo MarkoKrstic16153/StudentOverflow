@@ -4,16 +4,40 @@
          Student Overflow
      </div>
  </nav>
-<h3>Dodajte Pitanje</h3>
-<p><label for="naslovInp">Vase pitanje :</label><textarea style=" resize: none;" cols="60" rows="3" name="naslovInp" placeholder="Naslov" (keyup)="onKeyNaslov($event)"></textarea></p>
-<p><label>Obrazlozenje pitanja : </label><textarea style=" resize: none;" cols="60" rows="12" placeholder="Dodajte tekst vaseg pitanja..." (keyup)="onKeyText($event)" ></textarea></p>
-<p><label for="tagInp">Unesite vas tag</label><input name="tagInp" placeholder="Tagovi" (keyup)="onKeyTag($event)"/><button (click)="addTag()">Dodajte Tag</button></p>
+<label for="naslovInp">Vase pitanje :</label>
+<textarea 
+    class="form-control col-6" 
+    style=" resize: none;" 
+    rows="3" 
+    name="naslovInp" 
+    placeholder="Naslov" 
+    (keyup)="onKeyNaslov($event)">
+</textarea>
+<label>Obrazlozenje pitanja : </label>
+<textarea 
+    class="form-control col-6" 
+    style=" resize: none;" 
+    rows="12" 
+    placeholder="Dodajte tekst vaseg pitanja..." 
+    (keyup)="onKeyText($event)" >
+</textarea>
+<label for="tagInp">Unesite vas tag</label>
+<div class="row">
+    <input 
+        name="tagInp" 
+        class="form-control col-3 m-2 ml-4" 
+        placeholder="Tagovi"
+        (keyup)="onKeyTag($event)"
+    />
+    <button class="btn btn-primary m-2" (click)="addTag()">Dodajte Tag</button>
+</div>
+
 <p>Vasi Trenutni Tagovi : </p>
-<ul>
-<li *ngFor="let tag of tags; let i=index;">
-     {{i + 1}} #{{tag}} <button (click)="deleteTag(index)">Obrisi Tag</button>
+<ul class="list-group col-4 m-1">
+<li class="list-group-item" *ngFor="let tag of tags">
+     #{{tag}} <button type="button" class="close" aria-label="Close" (click)="deleteTag(index)"><span aria-hidden="true">&times;</span></button>
 </li>
 </ul>
 
-<button (click)="addQuestion()">Dodaj Pitanje</button><button (click)="goBack()">Nazad</button>
+<button class="btn btn-success m-1" (click)="addQuestion()">Dodaj Pitanje</button>
 <p *ngIf="addQError">{{addQMessage}}</p>

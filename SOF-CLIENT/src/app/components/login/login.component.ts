@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
   signUp() {
       let userPassword$=this.httpService.getKorisnik(this.createAccFormGroup);
-      userPassword$.subscribe((response:any) => 
+      userPassword$.subscribe(async (response:any) => 
       {
         if(response.password==null)
         {
@@ -84,17 +84,24 @@ export class LoginComponent implements OnInit {
             Username:this.createAccFormGroup.get('username').value,
             Rank:0
           };
+          let x:string="";
           this.httpService.postKorisnik(noviKorisnik);
-          console.table(noviKorisnik);
+          this.httpService.loggedUser=noviKorisnik.Username;
+          await this.sleep(2000);
+          this.navigateToProfile();
         }
         else
         {
-          this.signUpErrorMessage="Taj username je zauzet!";
+          this.signUpErrorMessage="Username je vec zauzet!";
         }
     });
   }
-
-   goBack(){
-     this.location.back();
-   }
+  navigateToProfile()
+  {
+    this.router.navigate(['profil',this.httpService.loggedUser]);
+  }
+  sleep(ms)
+  {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 }

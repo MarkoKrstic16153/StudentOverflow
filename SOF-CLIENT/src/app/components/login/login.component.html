@@ -60,7 +60,12 @@
     </div>
     <div class="row text-monospace">Lozinka : 
         <input class="form-control" type="password" formControlName="password">
-        <div class="alert alert-danger" *ngIf="createAccFormGroup.get('password').invalid && (createAccFormGroup.get('password').dirty || createAccFormGroup.get('password').touched)" >
+        <div 
+            class="alert alert-danger" 
+            *ngIf="createAccFormGroup.get('password').invalid &&
+            (createAccFormGroup.get('password').dirty || 
+            createAccFormGroup.get('password').touched)" 
+         >
                 <div *ngIf="createAccFormGroup.get('password').errors.required">
                         Potrebno je uneti Korisnicko ime.
                 </div>
@@ -78,7 +83,6 @@
         [class]="createAccFormGroup.valid ? 'btn btn-success row mt-2 mr-2':'btn btn-primary row mt-2 mr-2'"
         (click)="signUp()">Registrujte Se
     </button>
-    <button class="btn btn-secondary row mt-2 ml-2"  (click)="goBack()">Nazad</button>
     <div *ngIf="signUpErrorMessage" class="alert alert-danger">
         {{signUpErrorMessage}}
     </div>
