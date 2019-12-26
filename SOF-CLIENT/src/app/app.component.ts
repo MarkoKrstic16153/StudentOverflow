@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { LoginService } from 'src/services/LoginService';
+import { Socket } from 'ngx-socket-io';
+import { QuestionsService } from 'src/services/QuestionsService';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,8 @@ import { LoginService } from 'src/services/LoginService';
 export class AppComponent {
   title = 'Student Overflow';
   currentURL:Observable<any>;
-  constructor(private route : ActivatedRoute,private router:Router,private login:LoginService,private location:Location) {
+  
+  constructor(private route : ActivatedRoute,private router:Router,private qService:QuestionsService,private login:LoginService,private location:Location,private socket:Socket) {
     
   }
   ngOnInit() {
@@ -30,4 +33,13 @@ export class AppComponent {
   {
     this.router.navigate(["profil",this.login.loggedUser]);
   }
+  getMessage() {
+    return this.socket
+        .fromEvent("message").subscribe((data)=>{console.log(data)});
+        
+}
+getObavestenja():any[]
+{
+  return this.qService.obavestenja;
+}
 }

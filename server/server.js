@@ -12,14 +12,94 @@ redisClient.on('error', function (err) {
 const express = require('express')
 const app = express()
 const port = 3000
+var http = require('http').createServer(app);
 var cors = require('cors')
 app.use(cors())
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}) );
+//io
+var io = require('socket.io')(http);
+io.on('connection', function(socket){
+    console.log('a user connected');
+  });
 
+  http.listen(4444,() => console.log(`Socket server listening on port 4444!`));
+//io
+///pub sub 
+app.post('/sub', (req, res) => {
+    let username=req.body.username;
+    let topic=req.body.naslov;
+    console.log("Sub sa : " + topic +" od strane : " + username);
+    redisClient.hget(username,"Subs",(greska,rezultat) =>{
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let nizSubova=JSON.parse(rezultat);
+        nizSubova.push(topic);
+        redisClient.hset(username,"Subs",JSON.stringify(nizSubova));
+    })
+    });
+
+app.post('/unsub', (req, res) => {
+    let username=req.body.username;
+    let topic=req.body.naslov;
+    console.log("Unsub sa : " + topic +" od strane : " + username);
+    redisClient.hget(username,"Subs",(greska,rezultat) =>{
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let nizSubova=JSON.parse(rezultat);
+        let index = nizSubova.indexOf(topic);
+        if (index > -1) {
+            nizSubova.splice(index, 1);
+            console.log('izbacuje');
+        }
+        redisClient.hset(username,"Subs",JSON.stringify(nizSubova));
+    })
+    });
+
+app.get('/usersubs/:username', function (req, res) {
+    var zahtev=req.params;
+    console.log(zahtev.username);
+    redisClient.hget(zahtev.username,"Subs",(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let nizSubova=JSON.parse(rezultat);
+        console.log("GET-ovao ->" + nizSubova);
+        res.send(nizSubova);
+    });
+  });
+
+app.post('/createpub', (req, res) => {
+    let kanal=req.body.naslov;
+    console.log("Kanal je : " + kanal);
+    const publisher = redis.createClient();
+    publisher.publish(kanal,kanal +" je napravljen.");
+    console.log('aaaaaa');
+    res.send("Publishing an Event using Redis");
+    })
+
+    app.post('/pub', (req, res) => {
+        let naslov=req.body.naslov;
+        let username=req.body.username;
+        console.log("publishuje se na : " + naslov);
+        const publisher = redis.createClient();
+        publisher.publish(naslov,{username:username,naslov:naslov});
+        io.emit(naslov,{username:username,naslov:naslov});
+        res.send("Publishing an Event using Redis");
+        })
+
+//pub sub end
 //#region GET
-app.get('/', (req, res) => res.send('Hello Marko World!'))
+
+app.get('/emit',(req, res)=>{
+    io.emit('message',"MOja POruka");
+})
 
 app.get('/login/:username', function (req, res) {
     var zahtev=req.params;
@@ -100,13 +180,11 @@ app.get('/user/:username', function (req, res) {
 
   app.get('/userquestions/:username', function (req, res) {
     var zahtev=req.params;
-    //console.log(zahtev.username);
     redisClient.hget(zahtev.username,"Pitanja",(greska,rezultat) => {
         if (greska) {
             console.log(greska);
             throw greska;
         }
-        //console.log("Getuje Userova Pitanja ->" + rezultat);
         res.send(JSON.parse(rezultat));
     });
   });
@@ -165,7 +243,6 @@ app.post('/question', function (req, res) {
             console.log(greska);
             throw greska;
         }
-
         console.log("GET-ovao ->" + rezultat);
         let noviUpvote=JSON.parse(rezultat);
         noviUpvote++;
@@ -227,6 +304,16 @@ app.post('/addquestion',(req, res)=>{
             nizPostavljenihPitanja.unshift(question.Naslov);
         redisClient.hset(question.KoJePitao,"Pitanja",JSON.stringify(nizPostavljenihPitanja));
     });
+    redisClient.hget(question.KoJePitao,"Subs",(greska,rezultat) =>{
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let nizSubova=JSON.parse(rezultat);
+        if(!nizSubova.includes(question.naslov))
+        nizSubova.push(question.Naslov);
+        redisClient.hset(question.KoJePitao,"Subs",JSON.stringify(nizSubova));
+    });
 });
 
 app.post('/tagintersect', function (req, res) {
@@ -278,12 +365,21 @@ app.post('/deletequestion', (req, res)=> {
         redisClient.hset(zahtev.odgovor.KoJeOdgovorio,"Rank",noviRank);
     })
     });
+    redisClient.hget(zahtev.odgovor.KoJeOdgovorio,"Subs",(greska,rezultat) =>{
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        let nizSubova=JSON.parse(rezultat);
+        if(!nizSubova.includes(zahtev.naslov)){
+        nizSubova.push(zahtev.naslov);
+        redisClient.hset(zahtev.odgovor.KoJeOdgovorio,"Subs",JSON.stringify(nizSubova));
+        }
+    });
   });
 
-
 app.listen(port, () => console.log(`Moji server listening on port ${port}!`))
-//redisSet("1",JSON.stringify(jsonObjekat));//json u string za bazu
-//redisClient.get("1", redisCallback);
+
 function redisRegisterUser(user) {
    redisClient.hset(user.Username,"Password",user.Sifra);
    redisClient.hset(user.Username,"Rank",user.Rank);
@@ -291,6 +387,7 @@ function redisRegisterUser(user) {
    redisClient.hset(user.Username,"Prezime",user.Prezime);
    redisClient.hset(user.Username,"Pitanja","[]");
    redisClient.hset(user.Username,"Liked","[]");
+   redisClient.hset(user.Username,"Subs","[]");
 }
 
 function deleteQuestionFromUser(question,user){
@@ -299,7 +396,6 @@ function deleteQuestionFromUser(question,user){
             console.log(greska);
             throw greska;
         }
-        
         let nizUserPitanja=JSON.parse(rezultat);
         let index = nizUserPitanja.indexOf(question);
         if (index > -1) {
@@ -318,5 +414,3 @@ function deleteQuestionFromTags(question,tags){
 function deleteFromAll(naslov){
     redisClient.srem("allquestions",naslov);
 }
-
- 

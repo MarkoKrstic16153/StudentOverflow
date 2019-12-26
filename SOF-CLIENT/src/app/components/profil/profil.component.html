@@ -29,4 +29,7 @@
 <button class="btn btn-primary m-2 col" (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
 <button class="btn btn-primary m-2 col" (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
 </div>
+<div *ngIf="subQuestions">
+    <div *ngFor="let sub of subQuestions"> {{sub}} <button (click)="unSub(sub)">Unsub</button></div>
+</div>
 

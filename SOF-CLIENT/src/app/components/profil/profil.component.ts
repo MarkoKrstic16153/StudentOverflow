@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { QuestionsService } from 'src/services/QuestionsService';
 import { LoginService } from 'src/services/LoginService';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-profil',
@@ -15,7 +16,10 @@ export class ProfilComponent implements OnInit {
   pitnja:string[];
   korisnikovaPitanja$:Observable<any>;
   userData$:Observable<Object>;
-  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService) {
+  subs$:Observable<string[]>;
+  subQuestions:string[];
+
+  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService,private socket:Socket) {
 
    }
 
@@ -25,6 +29,22 @@ export class ProfilComponent implements OnInit {
     });
     this.fetchUserData();
     this.fetchQuestions();
+    this.getSubs();
+  }
+  getSubs(){
+    this.subs$=this.questionService.getUserSubs(this.loginService.loggedUser);
+    this.subs$.subscribe((data)=>{this.subQuestions=data;console.log(this.subQuestions);this.stvoriAsyncPrijem()});
+  }
+  stvoriAsyncPrijem(){
+    this.socket.removeAllListeners();
+    this.subQuestions.forEach((sub) => {
+      let poruka:Observable<any>=this.socket.fromEvent<any>(sub);
+              poruka.subscribe((data)=>{
+                console.log("User :" + data.username + " Pitanje : "+data.pitanje);
+                  if(data.username!=this.loginService.loggedUser)
+                    this.questionService.obavestenja.push(data);
+      })
+    });
   }
   fetchUserData()
   {
@@ -58,6 +78,12 @@ export class ProfilComponent implements OnInit {
   }
   pretraziteKorisnike(){
     this.router.navigate(["profilSearch"]);
+  }
+  unSub(naslov:string){
+    console.log(naslov);
+    this.questionService.postUnsub(this.loginService.loggedUser,naslov).subscribe(()=>{
+      this.getSubs();
+    });
   }
 }
 

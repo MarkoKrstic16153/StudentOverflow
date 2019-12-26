@@ -17,6 +17,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OdgovorComponent } from './components/odgovor/odgovor.component';
 import { TagComponent } from './components/tag/tag.component';
 import { SerachUserComponent } from './components/serach-user/serach-user.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+ 
+const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
 
 @NgModule({
   declarations: [
@@ -40,8 +43,8 @@ import { SerachUserComponent } from './components/serach-user/serach-user.compon
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    BrowserAnimationsModule
-    
+    BrowserAnimationsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]

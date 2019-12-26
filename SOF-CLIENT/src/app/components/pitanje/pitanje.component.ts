@@ -6,6 +6,7 @@ import { Pitanje } from 'src/models/Pitanje';
 import { Odgovor } from 'src/models/Odgovor';
 import { LoginService } from 'src/services/LoginService';
 import { BindingFlags } from '@angular/compiler/src/core';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-pitanje',
@@ -18,7 +19,9 @@ export class PitanjeComponent implements OnInit {
   question:Pitanje;
   odgovor:string="";
   likedQuestions:string[]=[];
-  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService) { }
+  subs$:Observable<string[]>;
+  subQuestions:string[];
+  constructor(private route : ActivatedRoute,private router: Router,private questionService:QuestionsService,private loginService:LoginService,private socket:Socket) { }
 
   ngOnInit() {
     this.route.params.subscribe( Params=>{
@@ -26,6 +29,11 @@ export class PitanjeComponent implements OnInit {
       console.log(this.title);
     });
     this.getAnswers();
+    this.getSubs();
+  }
+  getSubs(){
+    this.subs$=this.questionService.getUserSubs(this.loginService.loggedUser);
+    this.subs$.subscribe((data)=>{this.subQuestions=data;console.log(this.subQuestions)});
   }
   getAnswers(){
     if(this.auth()){
@@ -57,7 +65,16 @@ export class PitanjeComponent implements OnInit {
       KoJeOdgovorio:this.loginService.loggedUser,Tekst:this.odgovor
     };
     console.log(noviOdgovor);
+    if(!this.subQuestions.includes(this.title)){
+    let poruka:Observable<any>=this.socket.fromEvent<any>(this.title);
+              poruka.subscribe((data)=>{
+                console.log("User :" + data.username + " Pitanje : "+ data.naslov);
+                  if(data.username!=this.loginService.loggedUser)
+                    this.questionService.obavestenja.push(data);
+              });
+            }
     this.question=null;
+    this.questionService.postPublishOnTopic(this.title,this.loginService.loggedUser);
     this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();});
   }
   auth():Boolean{
@@ -78,5 +95,19 @@ export class PitanjeComponent implements OnInit {
       flag=true;
     });
     return flag;
+  }
+  sub(){
+    this.questionService.postSub(this.loginService.loggedUser,this.title).subscribe(()=>{
+      this.getSubs();
+      let poruka:Observable<any>=this.socket.fromEvent<any>(this.title);
+              poruka.subscribe((data)=>{
+                console.log("User :" + data.username + " Pitanje : "+data.pitanje);
+                  if(data.username!=this.loginService.loggedUser)
+                    this.questionService.obavestenja.push(data);
+      });
+    })
+  }
+  daLiJeSubovan():Boolean{
+    return this.subQuestions.includes(this.title);
   }
 }

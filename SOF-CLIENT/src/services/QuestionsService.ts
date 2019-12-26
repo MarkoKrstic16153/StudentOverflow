@@ -19,7 +19,14 @@ export class QuestionsService {
     urlGetTagIntersectQuestions="http://localhost:3000/tagintersect";
     urlPostUpvote="http://localhost:3000/upvote";
     urlGetLikedQuestions="http://localhost:3000/liked/";
-    
+    urlPostCreatePublishTopic="http://localhost:3000/createpub";
+    urlPostPublishOnTopic="http://localhost:3000/pub";
+    urlPostSubscribeTopic="http://localhost:3005/sub";
+    urlGetUserSubs="http://localhost:3000/usersubs/";
+    urlPostUnSub="http://localhost:3000/unsub";
+    urlPostSub="http://localhost:3000/sub";
+    obavestenja:any[]=[];
+
     constructor(private httpClient: HttpClient) { }
     
     postQuestion(newQuestion:Pitanje):Observable<any>{
@@ -30,7 +37,7 @@ export class QuestionsService {
      .subscribe(data => {
        console.log(data);
       })
-      const numbers = interval(100);
+      const numbers = interval(200);
       const takeFourNumbers = numbers.pipe(take(1));
       return takeFourNumbers;
     }
@@ -96,5 +103,62 @@ export class QuestionsService {
     }
     getLikedQuestions(user:string):Observable<string[]>{
       return this.httpClient.get<string[]>(this.urlGetLikedQuestions+user);
+    }
+    postCreatePublishTopic(username:string,naslov:string){
+      const headers = new HttpHeaders()
+          .set('Authorization', 'my-auth-token')
+          .set('Content-Type', 'application/json');
+          this.httpClient.post<any>(this.urlPostCreatePublishTopic,{username:username,naslov:naslov},{headers:headers})
+          .subscribe(data => {
+             console.log(data);
+           })
+    }
+    postSubscribeTopic(username:string,naslov:string):Observable<any>{
+      const headers = new HttpHeaders()
+      .set('Authorization', 'my-auth-token')
+      .set('Content-Type', 'application/json');
+      this.httpClient.post<any>(this.urlPostSubscribeTopic,{username:username,naslov:naslov},{headers:headers})
+      .subscribe(data => {
+         console.log(data);
+       })
+        const numbers = interval(100);
+        const takeFourNumbers = numbers.pipe(take(1));
+        return takeFourNumbers;
+    }
+    postPublishOnTopic(naslov:string,username:string){
+      const headers = new HttpHeaders()
+      .set('Authorization', 'my-auth-token')
+      .set('Content-Type', 'application/json');
+      this.httpClient.post<any>(this.urlPostPublishOnTopic,{naslov:naslov,username:username},{headers:headers})
+      .subscribe(data => {
+         console.log(data);
+       })
+    }
+    getUserSubs(username:string):Observable<string[]>{
+      return this.httpClient.get<string[]>(this.urlGetUserSubs+username);
+    }
+    postUnsub(username:string,naslov:string):Observable<any>{
+      const headers = new HttpHeaders()
+      .set('Authorization', 'my-auth-token')
+      .set('Content-Type', 'application/json');
+      this.httpClient.post<any>(this.urlPostUnSub,{username:username,naslov:naslov},{headers:headers})
+      .subscribe(data => {
+         console.log(data);
+       })
+        const numbers = interval(100);
+        const takeFourNumbers = numbers.pipe(take(1));
+        return takeFourNumbers;
+    }
+    postSub(username:string,naslov:string):Observable<any>{
+      const headers = new HttpHeaders()
+      .set('Authorization', 'my-auth-token')
+      .set('Content-Type', 'application/json');
+      this.httpClient.post<any>(this.urlPostSub,{username:username,naslov:naslov},{headers:headers})
+      .subscribe(data => {
+         console.log(data);
+       })
+        const numbers = interval(100);
+        const takeFourNumbers = numbers.pipe(take(1));
+        return takeFourNumbers;
     }
 }
