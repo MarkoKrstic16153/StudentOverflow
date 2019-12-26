@@ -42,4 +42,8 @@ getObavestenja():any[]
 {
   return this.qService.obavestenja;
 }
+removeNotification(index:number)
+{ 
+  this.qService.obavestenja.splice(index,1);
+}
 }

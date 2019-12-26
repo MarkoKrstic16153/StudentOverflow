@@ -14,22 +14,74 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-        <a class="nav-item nav-link text-dark" [class.active]="currentURL=='/'" [routerLink]="['/']" >Početna strana</a>
-        <a class="nav-item nav-link text-dark"  [class.active]="currentURL=='/pretragapitanja/%23'" [routerLink]="['/pretragapitanja/%23']">Pretraga</a>
-        <a *ngIf="!login.loggedUser;else loggedIn" class="nav-item nav-link text-dark" [class.active]="currentURL=='/login'" [routerLink]="['/login']">Prijavi se</a>
+        <a 
+            class="nav-item nav-link text-dark" 
+            [class.active]="currentURL=='/'" 
+            [routerLink]="['/']" >
+            Početna strana
+        </a>
+        <a 
+            class="nav-item nav-link text-dark"
+            [class.active]="currentURL=='/pretragapitanja/%23'"
+            [routerLink]="['/pretragapitanja/%23']">
+            Pretraga
+        </a>
+        <a 
+            *ngIf="!login.loggedUser;else loggedIn" 
+            class="nav-item nav-link text-dark" 
+            [class.active]="currentURL=='/login'" 
+            [routerLink]="['/login']">
+            Prijavi se
+        </a>
         <a  class="nav-item nav-link text-dark" (click)="goBack()">Nazad</a>
+
         <ng-template #loggedIn>
-            <a class="nav-item nav-link text-dark" [class.active]="currentURL=='/'" (click)="goProfile()">Profil</a>
-            <a class="nav-item nav-link text-dark" [class.active]="currentURL=='/'" [routerLink]="['/']" (click)="logout()">Izloguje se</a>
+            <a 
+                class="nav-item nav-link text-dark" 
+                [class.active]="currentURL=='/'" 
+                (click)="goProfile()">
+                Profil
+            </a>
+            <a 
+                class="nav-item nav-link text-dark"
+                [class.active]="currentURL=='/'" 
+                [routerLink]="['/']" 
+                (click)="logout()">
+                Izloguje se
+            </a>
+            <!-- notification -->
+            <div class="dropdown">
+                <a 
+                    class="btn btn-primary dropdown-toggle" 
+                    href="#" role="button" 
+                    id="dropdownMenuLink" 
+                    data-toggle="dropdown" 
+                    aria-haspopup="true" 
+                    aria-expanded="false">
+                <img [src]="qService.obavestenja.length==0?'../assets/icons/bell.svg':'../assets/icons/bell_on.svg'" style="height: 20px;" alt="">
+                </a>
+                <div   
+                    class="dropdown-menu dropdown-menu-right"
+                    aria-labelledby="dropdownMenuLink">
+                    <h6 *ngIf="qService.obavestenja.length==0" class="dropdown-header">Nema novih notifikacija</h6>
+                    <h6 *ngIf="qService.obavestenja.length!=0" class="dropdown-header">Najnovije notifikacije</h6>
+                    <div
+                        *ngFor="let obavestenje of getObavestenja(); let i=index"
+                        class="dropdown-item">
+                        <a 
+                            [routerLink]="['/pitanje/'+obavestenje.naslov]" 
+                            (click)="removeNotification(i)">
+                            {{obavestenje.username}} je odgovorio na {{obavestenje.naslov}}
+                        </a>
+                        <button type="button" class="close" aria-label="Close" (click)="removeNotification(i)">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- notification -->
           </ng-template>
     </div>
   </div>
 </nav>
-
-<!-- popup -->
-<div *ngIf="qService.obavestenja.length!=0">
-    <div *ngFor="let obavestenje of getObavestenja()">
-        Odgovorio je : {{obavestenje.username}} ,Naslov {{obavestenje.naslov}}
-   </div>
-</div>
 <router-outlet></router-outlet>

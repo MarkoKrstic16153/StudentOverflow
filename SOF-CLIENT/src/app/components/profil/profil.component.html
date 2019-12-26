@@ -1,9 +1,3 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary row">
-    <div class="navbar-brand">
-        <img style="height: 50px;" src="" alt="">
-        Student Overflow
-    </div>
-</nav>
 <div class="row">
     <div class="col-6" *ngIf="data">
         <h2 class="text-center">Korisnicki podaci:</h2>
@@ -29,7 +23,10 @@
 <button class="btn btn-primary m-2 col" (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
 <button class="btn btn-primary m-2 col" (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
 </div>
-<div *ngIf="subQuestions">
-    <div *ngFor="let sub of subQuestions"> {{sub}} <button (click)="unSub(sub)">Unsub</button></div>
+<div class="col-6" *ngIf="subQuestions">
+    <div class="row" *ngFor="let sub of subQuestions">
+        <a  class="btn btn-link" [routerLink]="['/pitanje/'+sub]"> {{sub}}</a> 
+        <button class="btn btn-outline-danger" (click)="unSub(sub)">Unsubscribe</button>
+    </div>
 </div>
 

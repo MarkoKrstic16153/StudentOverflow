@@ -1,9 +1,3 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary row">
-    <div class="navbar-brand">
-        <img style="height: 50px;" src="" alt="">
-        Student Overflow
-    </div>
-</nav>
 <div>
 <div class="container">
     <div *ngIf="question">
@@ -20,6 +14,7 @@
             <button class="btn btn-link align-baseline" *ngIf="auth() && !daLiJeLajkovao() && likedQuestions" (click)="upvote(question.Naslov)">
                     <img class="img-fluid" src="../../../assets/icons/upvote.svg" style="width:30px" alt="upvote">
             </button>
+            <button class="btn btn-danger" *ngIf="subQuestions && !daLiJeSubovan()" (click)="sub()">Subscribe</button>
         </div>
         <div>
         <ul class="nav row justify-content-center">
@@ -41,4 +36,3 @@
         </div>
     </div>
 </div>
-<button *ngIf="subQuestions && !daLiJeSubovan()" (click)="sub()">Subscribe</button>
