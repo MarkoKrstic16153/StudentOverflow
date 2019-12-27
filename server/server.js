@@ -283,20 +283,47 @@ app.post('/addquestion',(req, res)=>{
     redisClient.hset(question.Naslov,"Odgovori",JSON.stringify(question.Odgovori));
     question.Tagovi.forEach(tag => {
         //pamti za svaki tag pitanja
-        redisClient.sadd(tag,question.Naslov);
+        redisClient.sismember(tag,question.Naslov,(greska,rezultat) => {
+            if (greska) {
+                console.log(greska);
+                throw greska;
+            }
+            console.log("Is member ->" + rezultat);
+            if(rezultat=="0"){
+                redisClient.sadd(tag,question.Naslov);
+            }
+        });
     });
     //dodaje pitanje u nova
-    redisClient.lpush("nova",question.Naslov);
-    redisClient.rpop("nova");
+    redisClient.lrange("nova",0,-1,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Nova pitanja naslovi ->" + rezultat);
+        if(!rezultat.includes(question.Naslov))
+            {
+                redisClient.lpush("nova",question.Naslov);
+                redisClient.rpop("nova");
+            }
+    });
     //dodaje pitanjeu sva
-    redisClient.sadd("allquestions",question.Naslov);
+    redisClient.sismember("allquestions",question.Naslov,(greska,rezultat) => {
+        if (greska) {
+            console.log(greska);
+            throw greska;
+        }
+        console.log("Is member ->" + rezultat);
+        if(rezultat=="0"){
+            redisClient.sadd("allquestions",question.Naslov);
+        }
+    });
     //dodaje pitanje kod usera
     redisClient.hget(question.KoJePitao,"Pitanja",(greska,rezultat) => {
         if (greska) {
             console.log(greska);
             throw greska;
         }
-
         console.log("Pitanja Usera su ->" + rezultat);
         //res.send(rezultat);
         let nizPostavljenihPitanja=JSON.parse(rezultat);
@@ -353,17 +380,19 @@ app.post('/deletequestion', (req, res)=> {
             throw greska;
         }
         let odgovori=JSON.parse(rezultat);
-        odgovori.push(zahtev.odgovor);
-        redisClient.hset(zahtev.naslov,"Odgovori",JSON.stringify(odgovori));
-        redisClient.hget(zahtev.odgovor.KoJeOdgovorio,"Rank",(greska1,rezultat1) =>{ if (greska1) {
-            console.log(greska1);
-            throw greska1;
-
+        if(!daLiJeDupliOdgovor(odgovori,zahtev.odgovor)){
+            odgovori.push(zahtev.odgovor);
+            redisClient.hset(zahtev.naslov,"Odgovori",JSON.stringify(odgovori));
+            redisClient.hget(zahtev.odgovor.KoJeOdgovorio,"Rank",(greska1,rezultat1) =>{
+                if (greska1) {
+                   console.log(greska1);
+                   throw greska1;
+               }
+               let stariRank=JSON.parse(rezultat1);
+               let noviRank = stariRank+1;
+               redisClient.hset(zahtev.odgovor.KoJeOdgovorio,"Rank",noviRank);
+           });
         }
-        let stariRank=JSON.parse(rezultat1);
-        let noviRank = stariRank+1;
-        redisClient.hset(zahtev.odgovor.KoJeOdgovorio,"Rank",noviRank);
-    })
     });
     redisClient.hget(zahtev.odgovor.KoJeOdgovorio,"Subs",(greska,rezultat) =>{
         if (greska) {
@@ -413,4 +442,13 @@ function deleteQuestionFromTags(question,tags){
 
 function deleteFromAll(naslov){
     redisClient.srem("allquestions",naslov);
+}
+
+function daLiJeDupliOdgovor(nizOdgovora,noviOdgovor){
+    let flag = false;
+    nizOdgovora.forEach((odgovor)=>{
+        if(odgovor.Tekst==noviOdgovor.Tekst && odgovor.KoJeOdgovorio == noviOdgovor.KoJeOdgovorio)
+            flag=true;
+    });
+    return flag;
 }

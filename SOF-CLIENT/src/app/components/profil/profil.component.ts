@@ -33,7 +33,12 @@ export class ProfilComponent implements OnInit {
   }
   getSubs(){
     this.subs$=this.questionService.getUserSubs(this.loginService.loggedUser);
-    this.subs$.subscribe((data)=>{this.subQuestions=data;console.log(this.subQuestions);this.stvoriAsyncPrijem()});
+    this.subs$.subscribe((data)=>{
+      this.subQuestions=data;
+      let uniqueSubs:string[] = Array.from(new Set(this.subQuestions));
+      this.subQuestions = uniqueSubs;
+      this.stvoriAsyncPrijem();
+    });
   }
   stvoriAsyncPrijem(){
     this.socket.removeAllListeners();
