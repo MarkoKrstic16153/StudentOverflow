@@ -23,10 +23,10 @@
 <button class="btn btn-primary m-2 col" (click)="pretrazitePitanja()">Pretrazite Pitanja</button>
 <button class="btn btn-primary m-2 col" (click)="pretraziteKorisnike()">Pretrazite Korisnike</button>
 </div>
-<div class="col-6" *ngIf="subQuestions">
-    <div class="row" *ngFor="let sub of subQuestions">
-        <a  class="btn btn-link" [routerLink]="['/pitanje/'+sub]"> {{sub}}</a> 
-        <button class="btn btn-outline-danger" (click)="unSub(sub)">Unsubscribe</button>
+<ul class="list-group col-6" *ngIf="subQuestions">
+    <div class=" list-group-item d-flex row" *ngFor="let sub of subQuestions">
+        <a  class="btn btn-link flex-grow-1 text-left" [routerLink]="['/pitanje/'+sub]"> {{sub}}</a> 
+        <button class="btn btn-outline-danger justify-content-end" (click)="unSub(sub)">Unsubscribe</button>
     </div>
-</div>
+</ul>
 

@@ -75,7 +75,7 @@ export class PitanjeComponent implements OnInit {
             }
     this.question=null;
     this.questionService.postPublishOnTopic(this.title,this.loginService.loggedUser);
-    this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();});
+    this.questionService.addAnswer(noviOdgovor,this.title).subscribe(()=>{this.getAnswers();this.getSubs()});
   }
   auth():Boolean{
     return this.loginService.loggedUser!="";

@@ -7,7 +7,6 @@ import { LoginComponent } from './components/login/login.component';
 import { PitanjeComponent } from './components/pitanje/pitanje.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfilComponent } from './components/profil/profil.component';
-import { PitanjaComponent } from './components/pitanja/pitanja.component';
 import { PretragaPitanjaComponent } from './components/pretraga-pitanja/pretraga-pitanja.component';
 import { DodajPitanjeComponent } from './components/dodaj-pitanje/dodaj-pitanje.component';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
@@ -28,7 +27,6 @@ const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
     PitanjeComponent,
     HomeComponent,
     ProfilComponent,
-    PitanjaComponent,
     PretragaPitanjaComponent,
     DodajPitanjeComponent,
     SearchBarComponent,
