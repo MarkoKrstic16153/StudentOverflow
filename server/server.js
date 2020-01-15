@@ -304,6 +304,7 @@ app.post('/addquestion',(req, res)=>{
         if(!rezultat.includes(question.Naslov))
             {
                 redisClient.lpush("nova",question.Naslov);
+                if(rezultat.length>=10)
                 redisClient.rpop("nova");
             }
     });
